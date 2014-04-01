@@ -2,6 +2,8 @@ April1
 ======
 (C) 2014 RoboterHund
 
+NOTE: please read this in the 'raw' tab... I just realised that I need to learn the .md format ASAP! (updated several nanoseconds after comitting)
+
 This project exists because the author wanted a templating system,
 but did not want to use another language besides JavaScript.
 
