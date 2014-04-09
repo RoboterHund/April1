@@ -26,13 +26,22 @@ var tags = [
 	'html',
 
 	'head',
+	'link',
 	'meta',
 	'title',
 
 	'body',
 	'a',
+	'abbr',
+	'blockquote',
 	'br',
+	'button',
+	'code',
+	'col',
+	'colgroup',
 	'div',
+	'em',
+	'form',
 	'h1',
 	'h2',
 	'h3',
@@ -40,13 +49,26 @@ var tags = [
 	'h5',
 	'h6',
 	'img',
+	'input',
+	'label',
+	'li',
+	'object',
+	'ol',
+	'option',
 	'p',
 	'span',
+	'strong',
 	'table',
+	'textarea',
+	'tbody',
 	'td',
+	'tfoot',
 	'th',
+	'thead',
 	'tr',
+	'ul',
 
+	'noscript',
 	'script',
 	'style'
 ];
@@ -56,8 +78,10 @@ var attrs = [
 	'href',
 	'id',
 	'lang',
+	'name',
 	'src',
-	renamed ('style', 'inline_style')
+	renamed ('style', 'inline_style'),
+	'type'
 ];
 
 var NAME_FUNCTION = 'NAME_FUNCTION';
