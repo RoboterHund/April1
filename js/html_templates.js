@@ -9,15 +9,8 @@
 var get_html_module = function (params) {
 
 	// returned module
-	var html_module;
-	if (params && params.extend) {
-		// extend module
-		html_module = params.extend;
-
-	} else {
-		// new module
-		html_module = {};
-	}
+	var html_module =
+		(params && params.extend) ? params.extend : {};
 
 	// templates module
 	var T = params.templates_module;
@@ -26,10 +19,6 @@ var get_html_module = function (params) {
 	var X = params.xml_module;
 
 	// doctype html
-	html_module.doctype = function () {
-		return T.fixed_string ('<!DOCTYPE html>');
-	};
-
 	html_module.doctype = function () {
 		return T.fixed_string ('<!DOCTYPE html>');
 	};
@@ -96,6 +85,4 @@ var get_html_module = function (params) {
 	return html_module;
 };
 
-module.exports = {
-	get_html_module: get_html_module
-};
+module.exports = get_html_module;

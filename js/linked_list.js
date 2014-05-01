@@ -4,15 +4,8 @@
 var get_linked_list_module = function (params) {
 
 	// returned module
-	var list_module;
-	if (params && params.extend) {
-		// extend module
-		list_module = params.extend;
-
-	} else {
-		// new module
-		list_module = {};
-	}
+	var list_module =
+		(params && params.extend) ? params.extend : {};
 
 	// node constructor
 	function ListNode (value) {
@@ -73,6 +66,7 @@ var get_linked_list_module = function (params) {
 		};
 
 		// pop first item
+		//noinspection JSUnusedGlobalSymbols
 		this.pop = function () {
 			var popped = head.next;
 
@@ -93,6 +87,7 @@ var get_linked_list_module = function (params) {
 		};
 
 		// get size
+		//noinspection JSUnusedGlobalSymbols
 		this.size = function () {
 			return size;
 		};
@@ -121,6 +116,4 @@ var get_linked_list_module = function (params) {
 	return list_module;
 };
 
-module.exports = {
-	get_linked_list_module: get_linked_list_module
-};
+module.exports = get_linked_list_module;

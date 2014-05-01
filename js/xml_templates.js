@@ -9,18 +9,8 @@
 var get_xml_module = function (params) {
 
 	// returned module
-	var xml_module;
-	if (params.extend) {
-		// extend module
-		xml_module = params.extend;
-
-	} else {
-		// new module
-		xml_module = {};
-	}
-
-	// templates module
-	var T = params.templates_module;
+	var xml_module =
+		(params && params.extend) ? params.extend : {};
 
 	// list module
 	var L = params.list_module;
@@ -100,6 +90,4 @@ var get_xml_module = function (params) {
 	return xml_module;
 };
 
-module.exports = {
-	get_xml_module: get_xml_module
-};
+module.exports = get_xml_module;

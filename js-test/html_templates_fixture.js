@@ -4,23 +4,20 @@
 var assert = require ('assert');
 var mod_test = require ('./test');
 
-var import_templates = require ('../js/templates.pack');
-var import_xml = require ('../js/xml_templates');
-var import_html = require ('../js/html_templates');
+var T = {};
+var params = {
+	extend          : T,
+	list_module     : T,
+	templates_module: T,
+	xml_module      : T
+};
+require ('../js/linked_list') (params);
+require ('../js/parameters') (params);
+require ('../js/templates') (params);
+require ('../js/xml_templates') (params);
+require ('../js/html_templates') (params);
 
-var T = import_templates.get_pack ();
-import_xml.get_xml_module (
-	{
-		extend          : T,
-		list_module     : T,
-		templates_module: T
-	});
-import_html.get_html_module (
-	{
-		extend          : T,
-		templates_module: T,
-		xml_module      : T
-	});
+var placeholder = require ('../js/placeholders').forbidden_placeholder;
 
 var msg_assert_expected_got = 'should be (expected === got)';
 
@@ -64,7 +61,7 @@ exports.test_1 = function (test) {
 		);
 
 		var got = T.string (
-			T.params ()
+			T.params (placeholder)
 				.set (keys.title, keys.title)
 				.set (keys.message, keys.message),
 			template

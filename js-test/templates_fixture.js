@@ -4,16 +4,12 @@
 var assert = require ('assert');
 var mod_test = require ('./test');
 
-var import_linked_list = require ('../js/linked_list');
-var import_parameters = require ('../js/parameters');
-var import_templates = require ('../js/templates');
-
 var msg_assert_expected_got = 'should be (expected === got)';
 
 var T1 = (function () {
-	var L = import_linked_list.get_linked_list_module ();
-	var P = import_parameters.get_params_module ();
-	var T = import_templates.get_templates_module (
+	var L = require ('../js/linked_list') ();
+	var P = require ('../js/parameters') ();
+	var T = require ('../js/templates') (
 		{
 			list_module: L,
 			extend     : P

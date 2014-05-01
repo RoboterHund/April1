@@ -1,5 +1,4 @@
 // templates module
-// version 0.1
 'use strict';
 
 // requires:
@@ -9,23 +8,15 @@
 var get_templates_module = function (params) {
 
 	// returned module
-	var templates_module;
-	if (params.extend) {
-		// extend module
-		templates_module = params.extend;
-
-	} else {
-		// new module
-		templates_module = {};
-	}
+	var templates_module =
+		(params && params.extend) ? params.extend : {};
 
 	// list module
 	var list_module = params.list_module;
 
 	// empty parameterizer
-	//noinspection JSUnusedLocalSymbols
 	var empty_params = {
-		get: function (whatever) {
+		get: function (ignore) {
 			return undefined;
 		}
 	};
@@ -275,6 +266,4 @@ var get_templates_module = function (params) {
 	return templates_module;
 };
 
-module.exports = {
-	get_templates_module: get_templates_module
-};
+module.exports = get_templates_module;
