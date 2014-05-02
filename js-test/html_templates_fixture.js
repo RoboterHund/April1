@@ -6,6 +6,11 @@ var mod_test = require ('./test');
 
 var T = {};
 var params = {
+	buffer_params: {
+		encoding       : 'utf-8',
+		initialSize    : 1024,
+		incrementAmount: 512
+	},
 	extend          : T,
 	list_module     : T,
 	templates_module: T,

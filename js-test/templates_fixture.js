@@ -11,6 +11,11 @@ var T1 = (function () {
 	var P = require ('../js/parameters') ();
 	var T = require ('../js/templates') (
 		{
+			buffer_params: {
+				encoding       : 'utf-8',
+				initialSize    : 1024,
+				incrementAmount: 512
+			},
 			list_module: L,
 			extend     : P
 		});

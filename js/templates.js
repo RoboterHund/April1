@@ -4,6 +4,9 @@
 // requires:
 // linked list
 
+//noinspection CodeAssistanceForRequiredModule
+var stream_buffers = require ('stream-buffers');
+
 // templates module
 var get_templates_module = function (params) {
 
@@ -13,6 +16,9 @@ var get_templates_module = function (params) {
 
 	// list module
 	var list_module = params.list_module;
+
+	// stream buffer params
+	var buffer_params = params.buffer_params;
 
 	// empty parameterizer
 	var empty_params = {
@@ -100,7 +106,8 @@ var get_templates_module = function (params) {
 
 		// factory
 		var factory = this;
-		var string_parts = [];
+		var string_buffer = null;
+
 		var parts = list_module.list ();
 
 		// parameterizer
@@ -110,15 +117,19 @@ var get_templates_module = function (params) {
 		var finish = function () {
 
 			// join accumulated fixed string parts
-			var fixed_string = string_parts.join ('');
+			var fixed_string;
+			if (string_buffer) {
+				fixed_string = string_buffer.getContentsAsString (
+					buffer_params.encoding);
+				string_buffer.destroy ();
+				string_buffer = null;
 
-			if (fixed_string.length > 0) {
-				// add to template
-				parts.put (
-					new FixedString (fixed_string));
+				if (fixed_string.length > 0) {
+					// add to template
+					parts.put (
+						new FixedString (fixed_string));
+				}
 			}
-
-			string_parts = [];
 		};
 
 		// consume input
@@ -134,14 +145,20 @@ var get_templates_module = function (params) {
 				} else {
 					// add string
 					var string = arg.toString ();
-					string_parts.push (string);
+					string_buffer = string_buffer
+						|| new stream_buffers
+						.WritableStreamBuffer (buffer_params);
+					string_buffer.write (string);
 				}
 			}
 		};
 
 		// add segment of fixed string part
 		this.append_string = function (string) {
-			string_parts.push (string);
+			string_buffer = string_buffer
+				|| new stream_buffers
+				.WritableStreamBuffer (buffer_params);
+			string_buffer.write (string);
 		};
 
 		// add part, not a fixed string
@@ -154,12 +171,13 @@ var get_templates_module = function (params) {
 
 		// append items from list
 		this.concatenate = function (list) {
-			list.each (function (item) {
+			list.each (function tf_concat_item (item) {
 				factory.put (item);
 			});
 		};
 
 		// get final result
+		// must be the last method called
 		this.get_result = function () {
 			finish ();
 			return parts;
@@ -215,8 +233,9 @@ var get_templates_module = function (params) {
 		// generator
 		var generator = this;
 
-		// string parts
-		var parts = [];
+		// string buffer
+		var buffer =
+			new stream_buffers.WritableStreamBuffer (buffer_params);
 
 		// parameters
 		this.params = null;
@@ -232,13 +251,13 @@ var get_templates_module = function (params) {
 
 		// add string
 		this.append = function (string) {
-			parts.push (string);
+			buffer.write (string);
 		};
 
 		// get final string
 		this.get_result = function () {
 			// join string parts
-			return parts.join ('');
+			return buffer.getContentsAsString (buffer_params.encoding);
 		};
 	}
 

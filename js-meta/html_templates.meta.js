@@ -9,6 +9,11 @@ function generate_html_module_code () {
 
 	var T = {};
 	var module_params = {
+		buffer_params: {
+			encoding       : 'utf-8',
+			initialSize    : 1024,
+			incrementAmount: 512
+		},
 		extend          : T,
 		list_module     : T,
 		templates_module: T,
