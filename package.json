@@ -1,6 +1,6 @@
 {
 	"name"        : "april1",
-	"version"     : "0.1",
+	"version": "0.0.1",
 	"description" : "anti-templates engine",
 	"keywords"    : ["template", "templates", "xml", "html"],
 	"repository"  : {
