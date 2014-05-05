@@ -4,23 +4,12 @@
 var assert = require ('assert');
 var mod_test = require ('./test');
 
-var T = {};
-var params = {
-	buffer_params: {
+var T = require ('../js/main') (
+	{
 		encoding       : 'utf-8',
 		initialSize    : 1024,
 		incrementAmount: 512
-	},
-	extend          : T,
-	list_module     : T,
-	templates_module: T,
-	xml_module      : T
-};
-require ('../js/linked_list') (params);
-require ('../js/parameters') (params);
-require ('../js/templates') (params);
-require ('../js/xml_templates') (params);
-require ('../js/html_templates') (params);
+	});
 
 var placeholder = require ('../js/placeholders').forbidden_placeholder;
 
