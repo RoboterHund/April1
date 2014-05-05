@@ -6,9 +6,9 @@ var mod_test = require ('./test');
 
 var T = require ('../js/main') (
 	{
-		encoding       : 'utf-8',
-		initialSize    : 1024,
-		incrementAmount: 512
+		encoding        : 'utf-8',
+		min_buffer_size : 1024,
+		buffer_increment: 512
 	});
 
 var placeholder = require ('../js/placeholders').forbidden_placeholder;
