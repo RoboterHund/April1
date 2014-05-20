@@ -98,3 +98,15 @@ Suggestions on how to improve it are very welcome.
 
 *RoboterHund*  
 *2014/04/01*
+
+versions
+======
+
+*0.0.1*
+Initial version , from 2014/04/01
+
+*0.1.1*
+Attempt to simplify node module export interface.
+Restructured components with the aim of simplifying static analysis:
+	IDEs like IntelliJ should autocomplete and find the declaration
+	of all exported April1 functions and objects.

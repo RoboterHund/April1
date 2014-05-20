@@ -7,21 +7,7 @@ function generate_html_module_code () {
 		console.log (arg);
 	};
 
-	var T = {};
-	var module_params = {
-		buffer_params: {
-			encoding       : 'utf-8',
-			initialSize    : 1024,
-			incrementAmount: 512
-		},
-		extend          : T,
-		list_module     : T,
-		templates_module: T,
-		xml_module      : T
-	};
-	require ('../js/linked_list') (module_params);
-	require ('../js/parameters') (module_params);
-	require ('../js/templates') (module_params);
+	var A = require ('../js/main');
 
 	function RenamedItem (original, renamed) {
 		this.original = original;
@@ -90,7 +76,7 @@ function generate_html_module_code () {
 		'lang',
 		'name',
 		'src',
-		renamed ('style', 'inline_style'),
+		renamed ('style', 'style_attr'),
 		'type'
 	];
 
@@ -98,34 +84,35 @@ function generate_html_module_code () {
 	var NAME_ITEM = 'NAME_ITEM';
 	var FUNCTION = 'FUNCTION';
 
-	var params = T.params (require ('../js/placeholders').no_placeholder);
+	var params = A.params (A.placeholders.nothing);
 
-	var line_template = T.template (
-		'\thtml_module.',
-		T.include (NAME_FUNCTION),
-		' = X.',
-		T.include (FUNCTION),
+	var line_template = A.template (
+		'\tA1.',
+		A.include (NAME_FUNCTION),
+		' = A1.',
+		A.include (FUNCTION),
 		'.bind (undefined, \'',
-		T.include (NAME_ITEM),
+		A.include (NAME_ITEM),
 		'\');\n'
 	);
 	params.set (FUNCTION, 'tag');
-	var tag_line_template = T.template (
+	var tag_line_template = A.template (
 		params,
 		line_template
 	);
 	params.set (FUNCTION, 'attr');
-	var attr_line_template = T.template (
+	var attr_line_template = A.template (
 		params,
 		line_template
 	);
 
-	var generator = T.generator ();
+	var generator = A.generator ();
 
 	var append_lines = function (items, template) {
 		var ii, ni = items.length;
+		var item;
 		for (ii = 0; ii < ni; ii++) {
-			var item = items [ii];
+			item = items [ii];
 
 			if (item instanceof RenamedItem) {
 				generator.put (

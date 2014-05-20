@@ -4,14 +4,9 @@
 var assert = require ('assert');
 var mod_test = require ('./test');
 
-var T = require ('../js/main') (
-	{
-		encoding        : 'utf-8',
-		min_buffer_size : 1024,
-		buffer_increment: 512
-	});
+var A = require ('../js/main');
 
-var placeholder = require ('../js/placeholders').forbidden_placeholder;
+var placeholder = require ('../js/templates/placeholders').error;
 
 var msg_assert_expected_got = 'should be (expected === got)';
 
@@ -34,28 +29,28 @@ exports.test_1 = function (test) {
 			message: 'Hello, Wörld!'
 		};
 
-		var template = T.template (
-			T.doctype (),
-			T.html (
-				T.head (
-					T.title (T.include (keys.title))
+		var template = A.template (
+			A.doctype (),
+			A.html (
+				A.head (
+					A.title (A.include (keys.title))
 				),
-				T.body (
-					T.lang ('en'),
-					T.p (
-						T.include (keys.message),
-						T.br (),
-						T.span (
-							T.fixed_string ('君はじつにばかだな！！！ :P'),
-							T.lang ('ja')
+				A.body (
+					A.lang ('en'),
+					A.p (
+						A.include (keys.message),
+						A.br (),
+						A.span (
+							A.fixed_string ('君はじつにばかだな！！！ :P'),
+							A.lang ('ja')
 						)
 					)
 				)
 			)
 		);
 
-		var got = T.string (
-			T.params (placeholder)
+		var got = A.string (
+			A.params (placeholder)
 				.set (keys.title, keys.title)
 				.set (keys.message, keys.message),
 			template
