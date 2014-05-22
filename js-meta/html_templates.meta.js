@@ -80,68 +80,70 @@ function generate_html_module_code () {
 		'type'
 	];
 
-	var NAME_FUNCTION = 'NAME_FUNCTION';
-	var NAME_ITEM = 'NAME_ITEM';
-	var FUNCTION = 'FUNCTION';
+	var FUNCTION_NAME = 'FUNCTION_NAME';
+	var ITEM_NAME = 'ITEM_NAME';
+	var BASE_FUNCTION = 'BASE_FUNCTION';
 
-	var params = A.params (A.placeholders.nothing);
-
-	var line_template = A.template (
+	var line_items = A.group (
 		'\tA1.',
-		A.include (NAME_FUNCTION),
+		A.include (FUNCTION_NAME),
 		' = A1.',
-		A.include (FUNCTION),
+		A.include (BASE_FUNCTION),
 		'.bind (undefined, \'',
-		A.include (NAME_ITEM),
+		A.include (ITEM_NAME),
 		'\');\n'
 	);
-	params.set (FUNCTION, 'tag');
-	var tag_line_template = A.template (
-		params,
-		line_template
-	);
-	params.set (FUNCTION, 'attr');
-	var attr_line_template = A.template (
-		params,
-		line_template
+
+	var TAGS = 'tags';
+	var ATTRS = 'attrs';
+
+	var template = A.template (
+		'\t/* tags */\n',
+		A.list (TAGS, line_items),
+		'\t/* attributes */\n',
+		A.list (ATTRS, line_items)
 	);
 
-	var generator = A.generator ();
+	function create_list (items, base_function) {
+		var list = [];
 
-	var append_lines = function (items, template) {
-		var ii, ni = items.length;
-		var item;
+		var def, function_name, item_name;
+
+		var item, ii, ni = items.length;
 		for (ii = 0; ii < ni; ii++) {
-			item = items [ii];
+			item = items[ii];
 
 			if (item instanceof RenamedItem) {
-				generator.put (
-					params
-						.set (NAME_ITEM, item.original)
-						.set (NAME_FUNCTION, item.renamed),
-					template
-				);
+				function_name = item.renamed;
+				item_name = item.original;
 
 			} else {
-				generator.put (
-					params
-						.set (NAME_ITEM, item)
-						.set (NAME_FUNCTION, item),
-					template
-				);
+				function_name = item_name = item;
 			}
+
+			def = {};
+
+			def [FUNCTION_NAME] = function_name;
+			def [BASE_FUNCTION] = base_function;
+			def [ITEM_NAME] = item_name;
+
+			list.push (def);
 		}
-	};
 
-	generator.append ('\t/* tags */\n');
+		return list;
+	}
 
-	append_lines (tags, tag_line_template);
+	var tag_list = create_list (tags, 'tag');
 
-	generator.append ('\t/* attributes */\n');
+	var attr_list = create_list (attrs, 'attr');
 
-	append_lines (attrs, attr_line_template);
+	var params = A.params (A.placeholders.nothing)
+		.set (TAGS, tag_list)
+		.set (ATTRS, attr_list);
 
-	out (generator.get_result ());
+	var code = A.string (params, template);
+
+	out (code);
 }
 
 generate_html_module_code ();

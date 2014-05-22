@@ -5,12 +5,16 @@
 
 'use strict';
 
+// import ./logic
+var ItemList = require ('./logic/item_list');
+
 // import ./markup
 var XmlAttribute = require ('./markup/xml_attr');
 var XmlTag = require ('./markup/xml_tag');
 
 // import ./templates
 var FixedString = require ('./templates/fixed_string');
+var TemplateItemGroup = require ('./templates/group');
 var Include = require ('./templates/include');
 var Parameterizer = require ('./templates/parameters');
 var StringGenerator = require ('./templates/string_generator');
@@ -31,6 +35,7 @@ var buffer_params = {
 
 // configure buffer streams
 A1.buffer_settings = function (settings) {
+
 	if (settings.encoding) {
 		buffer_params.encoding = settings.encoding;
 	}
@@ -91,6 +96,11 @@ A1.template = function () {
 	factory.put.apply (null, arguments);
 
 	return new Template (factory.get_result ());
+};
+
+// group of reusable template items
+A1.group = function () {
+	return new TemplateItemGroup (arguments);
 };
 
 /* *
@@ -228,6 +238,15 @@ A1.name = A1.attr.bind (undefined, 'name');
 A1.src = A1.attr.bind (undefined, 'src');
 A1.style_attr = A1.attr.bind (undefined, 'style');
 A1.type = A1.attr.bind (undefined, 'type');
+
+/* *
+ *
+ * logic
+ */
+
+A1.list = function () {
+	return new ItemList (arguments, buffer_params);
+};
 
 module.exports = A1;
 

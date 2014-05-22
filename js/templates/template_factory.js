@@ -40,24 +40,28 @@ function TemplateFactory (buffer_params) {
 	};
 
 	// consume input
+	// one item
+	var this__put_one = function (arg) {
+		if (arg.to_template) {
+			// generate template
+			arg.to_template (factory);
+
+		} else {
+			// add string
+			string_buffer = string_buffer
+				|| new stream_buffers
+					.WritableStreamBuffer (buffer_params);
+			string_buffer.write (arg.toString ());
+		}
+	};
+	this.put_one = this__put_one;
+
+	// consume input
+	// many items
 	this.put = function () {
 		var ia, na = arguments.length;
-		var arg, string;
 		for (ia = 0; ia < na; ia++) {
-			arg = arguments [ia];
-
-			if (arg.to_template) {
-				// generate template
-				arg.to_template (factory);
-
-			} else {
-				// add string
-				string = arg.toString ();
-				string_buffer = string_buffer
-					|| new stream_buffers
-						.WritableStreamBuffer (buffer_params);
-				string_buffer.write (string);
-			}
+			this__put_one (arguments [ia]);
 		}
 	};
 
