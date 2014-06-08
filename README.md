@@ -80,6 +80,9 @@ Switched to camelCase everywhere.
 
 `to_template` and `to_string` renamed to `aTemp` and `aStr`.
 
+``0.2.2``
+Currently under development: trying to make output more configurable.
+
 *RoboterHund*  
 *2014/06/08*
 

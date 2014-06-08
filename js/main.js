@@ -49,6 +49,15 @@ A.bufferSettings = function (settings) {
 
 /* *
  *
+ * emitters
+ */
+
+A.emitters = {
+	xml: require ('./markup/xml_tag_emitter')
+};
+
+/* *
+ *
  * template fields
  */
 
@@ -91,7 +100,7 @@ A.isTemplate = function (arg) {
 // all arguments must implement aTemp (TemplateFactory)
 A.template = function () {
 	// create new factory
-	var factory = new TemplateFactory (bufferParams);
+	var factory = new TemplateFactory (bufferParams, A.emitters);
 
 	factory.put.apply (null, arguments);
 

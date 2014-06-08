@@ -40,7 +40,7 @@ function ItemList (args, bufferParams) {
 		// generate item template
 
 		var itemTemplateFactory =
-			new TemplateFactory (bufferParams);
+			new TemplateFactory (bufferParams, factory.emitters);
 
 		var ia, na = args.length;
 		for (ia = 1; ia < na; ia++) {
