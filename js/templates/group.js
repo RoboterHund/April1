@@ -10,7 +10,7 @@ function TemplateItemGroup (items) {
 	 *
 	 * @param {TemplateFactory} factory
 	 */
-	this.to_template = function (factory) {
+	this.aTemp = function (factory) {
 		factory.put.apply (null, items);
 	};
 

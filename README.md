@@ -41,11 +41,13 @@ would *by default* return this string:
 ***By default***.
 
 * * *
+
 unit tests
 ----------
 The ``js-test`` folder contains some fixtures for the ``nunitjs`` unit test framework.
 
 * * *
+
 versions
 --------
 

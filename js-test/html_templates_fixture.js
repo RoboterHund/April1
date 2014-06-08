@@ -2,17 +2,17 @@
 'use strict';
 
 var assert = require ('assert');
-var mod_test = require ('./test');
+var modTest = require ('./test');
 
 var A = require ('../js/main');
 
 var placeholder = require ('../js/templates/placeholders').error;
 
-var msg_assert_expected_got = 'should be (expected === got)';
+var msgAssertExpectedGot = 'should be (expected === got)';
 
 exports.test_1 = function (test) {
-	var tester = mod_test.test ({ name: 'HTML templates 1' });
-	tester.log_test (
+	var tester = modTest.test ({ name: 'HTML templates 1' });
+	tester.logTest (
 		function () {
 
 			var expected = '<!DOCTYPE html>'
@@ -23,7 +23,7 @@ exports.test_1 = function (test) {
 				+ '<span lang="ja">君はじつにばかだな！！！ :P</span></p>'
 				+ '</body>'
 				+ '</html>';
-			tester.log_expected (expected);
+			tester.logExpected (expected);
 
 			var keys = {
 				title  : 'HTML template test',
@@ -42,7 +42,7 @@ exports.test_1 = function (test) {
 							A.include (keys.message),
 							A.br (),
 							A.span (
-								A.fixed_string ('君はじつにばかだな！！！ :P'),
+								A.fixedString ('君はじつにばかだな！！！ :P'),
 								A.lang ('ja')
 							)
 						)
@@ -57,16 +57,16 @@ exports.test_1 = function (test) {
 				template
 			);
 
-			tester.log_got (got);
-			assert (expected === got, msg_assert_expected_got);
+			tester.logGot (got);
+			assert (expected === got, msgAssertExpectedGot);
 
 		});
 	test.done ();
 };
 
 exports.test_2 = function (test) {
-	var tester = mod_test.test ({ name: 'HTML templates 2' });
-	tester.log_test (
+	var tester = modTest.test ({ name: 'HTML templates 2' });
+	tester.logTest (
 		function () {
 
 			var expected = '<!DOCTYPE html>'
@@ -81,7 +81,7 @@ exports.test_2 = function (test) {
 				+ '</ul>'
 				+ '</body>'
 				+ '</html>';
-			tester.log_expected (expected);
+			tester.logExpected (expected);
 
 			var values = {
 				title: 'HTML list template test',
@@ -137,8 +137,8 @@ exports.test_2 = function (test) {
 
 			var got = A.string (params, template);
 
-			tester.log_got (got);
-			assert (expected === got, msg_assert_expected_got);
+			tester.logGot (got);
+			assert (expected === got, msgAssertExpectedGot);
 
 		});
 	test.done ();

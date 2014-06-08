@@ -9,13 +9,13 @@ function FixedString (string) {
 	// this function exists merely for consistency,
 	// the real purpose of this class is to store
 	// a string to feed string generators
-	this.to_template = function (factory) {
-		factory.append_string (string);
+	this.aTemp = function (factory) {
+		factory.appendString (string);
 	};
 
 	// generate string
 	// add string
-	this.to_string = function (generator) {
+	this.aStr = function (generator) {
 		generator.append (string);
 	};
 

@@ -4,19 +4,19 @@
 function Template (parts) {
 
 	// generate template
-	this.to_template = function (factory) {
+	this.aTemp = function (factory) {
 		var i, num_parts = parts.length;
 		for (i = 0; i < num_parts; i++) {
-			parts [i].to_template (factory);
+			parts [i].aTemp (factory);
 		}
 	};
 
 	// generate string
 	// feed each part to generator
-	this.to_string = function (generator) {
+	this.aStr = function (generator) {
 		var i, num_parts = parts.length;
 		for (i = 0; i < num_parts; i++) {
-			parts [i].to_string (generator);
+			parts [i].aStr (generator);
 		}
 	};
 

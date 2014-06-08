@@ -11,8 +11,8 @@ function XmlTag (args) {
 	 * generate template
 	 * @param {TemplateFactory} factory
 	 */
-	this.to_template = function (factory) {
-		factory.append_string ('<');
+	this.aTemp = function (factory) {
+		factory.appendString ('<');
 		factory.put (args [0]);
 
 		var cont_items = [];
@@ -35,14 +35,14 @@ function XmlTag (args) {
 
 		if (cont_items.length > 0) {
 			// add content
-			factory.append_string ('>');
+			factory.appendString ('>');
 
 			factory.put.apply (null, cont_items);
 
 			factory.put ('</', args [0], '>');
 
 		} else {
-			factory.append_string ('/>');
+			factory.appendString ('/>');
 		}
 	};
 

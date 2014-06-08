@@ -9,13 +9,13 @@ function Parameterizer (placeholder) {
 
 	// generate template
 	// set self as new parameterizer of factory
-	this.to_template = function (factory) {
+	this.aTemp = function (factory) {
 		factory.params = params;
 	};
 
 	// generate string
 	// set self as new parameterizer of generator
-	this.to_string = function (generator) {
+	this.aStr = function (generator) {
 		generator.params = params;
 	};
 

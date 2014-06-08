@@ -14,60 +14,60 @@ var TemplateFactory = require ('../templates/template_factory');
  * @param key
  * @returns {*}
  */
-function get_context_param (key) {
+function getContextParam (key) {
 	//noinspection JSUnresolvedVariable
 	return this.get (key);
 }
 
 // item list constructor
-function ItemList (args, buffer_params) {
+function ItemList (args, bufferParams) {
 
-	var item_list = this;
+	var itemList = this;
 
 	// key in parameterizer of item array
-	var param_key = args [0];
+	var paramKey = args [0];
 
 	// item template
 	var template;
 
 	// generate template
 	// parameterizer key, nested template stored within template
-	this.to_template = function (factory) {
+	this.aTemp = function (factory) {
 
 		// append self
-		factory.append_part (item_list);
+		factory.appendPart (itemList);
 
 		// generate item template
 
-		var item_template_factory =
-			new TemplateFactory (buffer_params);
+		var itemTemplateFactory =
+			new TemplateFactory (bufferParams);
 
 		var ia, na = args.length;
 		for (ia = 1; ia < na; ia++) {
-			item_template_factory.put_one (args [ia]);
+			itemTemplateFactory.putOne (args [ia]);
 		}
 
 		template = new Template (
-			item_template_factory.get_result ());
+			itemTemplateFactory.getResult ());
 	};
 
 	// generate string
 	// append to string the template
-	this.to_string = function (generator) {
-		var items = generator.params.get (param_key);
+	this.aStr = function (generator) {
+		var items = generator.params.get (paramKey);
 		var ii, ni = items.length;
 
-		var context_params = generator.params;
-		var item_params = new Parameterizer (
-			get_context_param.bind (context_params));
+		var contextParams = generator.params;
+		var itemParams = new Parameterizer (
+			getContextParam.bind (contextParams));
 
-		generator.params = item_params;
+		generator.params = itemParams;
 		for (ii = 0; ii < ni; ii++) {
-			item_params.map = items [ii];
-			template.to_string (generator);
+			itemParams.map = items [ii];
+			template.aStr (generator);
 		}
 
-		generator.params = context_params;
+		generator.params = contextParams;
 	};
 
 }

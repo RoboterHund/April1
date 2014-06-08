@@ -8,7 +8,7 @@ function Include (key) {
 	var include = this;
 
 	// generate template
-	this.to_template = function (factory) {
+	this.aTemp = function (factory) {
 		var value = factory.params.get (key);
 
 		if (value !== undefined) {
@@ -17,16 +17,16 @@ function Include (key) {
 
 		} else {
 			// output self
-			factory.append_part (include);
+			factory.appendPart (include);
 		}
 	};
 
 	// generate string
-	this.to_string = function (generator) {
+	this.aStr = function (generator) {
 		var value = generator.params.get (key);
-		if (value.to_string) {
+		if (value.aStr) {
 			// feed value to generator
-			value.to_string (generator);
+			value.aStr (generator);
 
 		} else {
 			// assume value is a string

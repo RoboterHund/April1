@@ -6,10 +6,10 @@ var stream_buffers = require ('stream-buffers');
 var FixedString = require ('./fixed_string');
 
 // template factory constructor
-function TemplateFactory (buffer_params) {
+function TemplateFactory (bufferParams) {
 	// factory
 	var factory = this;
-	var string_buffer = null;
+	var stringBuffer = null;
 
 	var parts = [];
 
@@ -24,66 +24,66 @@ function TemplateFactory (buffer_params) {
 	var finish = function () {
 
 		// join accumulated fixed string parts
-		var fixed_string;
-		if (string_buffer) {
-			fixed_string = string_buffer.getContentsAsString (
-				buffer_params.encoding);
-			string_buffer.destroy ();
-			string_buffer = null;
+		var fixedString;
+		if (stringBuffer) {
+			fixedString = stringBuffer.getContentsAsString (
+				bufferParams.encoding);
+			stringBuffer.destroy ();
+			stringBuffer = null;
 
-			if (fixed_string.length > 0) {
+			if (fixedString.length > 0) {
 				// add to template
 				parts.push (
-					new FixedString (fixed_string));
+					new FixedString (fixedString));
 			}
 		}
 	};
 
 	// consume input
 	// one item
-	var this__put_one = function (arg) {
-		if (arg.to_template) {
+	var putOne = function (arg) {
+		if (arg.aTemp) {
 			// generate template
-			arg.to_template (factory);
+			arg.aTemp (factory);
 
 		} else {
 			// add string
-			string_buffer = string_buffer
+			stringBuffer = stringBuffer
 				|| new stream_buffers
-					.WritableStreamBuffer (buffer_params);
-			string_buffer.write (arg.toString ());
+					.WritableStreamBuffer (bufferParams);
+			stringBuffer.write (arg.toString ());
 		}
 	};
-	this.put_one = this__put_one;
+	this.putOne = putOne;
 
 	// consume input
 	// many items
 	this.put = function () {
 		var ia, na = arguments.length;
 		for (ia = 0; ia < na; ia++) {
-			this__put_one (arguments [ia]);
+			putOne (arguments [ia]);
 		}
 	};
 
 	// add segment of fixed string part
-	this.append_string = function (string) {
-		string_buffer = string_buffer
+	this.appendString = function (string) {
+		stringBuffer = stringBuffer
 			|| new stream_buffers
-				.WritableStreamBuffer (buffer_params);
-		string_buffer.write (string);
+				.WritableStreamBuffer (bufferParams);
+		stringBuffer.write (string);
 	};
 
 	// add part, not a fixed string
-	// the part must implement to_string
+	// the part must implement aStr
 	// or the template won't work
-	this.append_part = function (part) {
+	this.appendPart = function (part) {
 		finish ();
 		parts.push (part);
 	};
 
 	// get final result
 	// must be the last method called
-	this.get_result = function () {
+	this.getResult = function () {
 		finish ();
 		return parts;
 	};

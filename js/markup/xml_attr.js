@@ -5,7 +5,7 @@
 function XmlAttribute (name, value) {
 
 	// generate template
-	this.to_template = function (factory) {
+	this.aTemp = function (factory) {
 		factory.put (
 			' ', name, '="', value, '"');
 	};

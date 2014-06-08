@@ -2,7 +2,7 @@
 // HTML templates
 'use strict';
 
-function generate_html_module_code () {
+function generateHtmlModuleCode () {
 	var out = function (arg) {
 		console.log (arg);
 	};
@@ -84,10 +84,10 @@ function generate_html_module_code () {
 	var ITEM_NAME = 'ITEM_NAME';
 	var BASE_FUNCTION = 'BASE_FUNCTION';
 
-	var line_items = A.group (
-		'\tA1.',
+	var lineItems = A.group (
+		'\tA.',
 		A.include (FUNCTION_NAME),
-		' = A1.',
+		' = A.',
 		A.include (BASE_FUNCTION),
 		'.bind (undefined, \'',
 		A.include (ITEM_NAME),
@@ -99,33 +99,33 @@ function generate_html_module_code () {
 
 	var template = A.template (
 		'\t/* tags */\n',
-		A.list (TAGS, line_items),
+		A.list (TAGS, lineItems),
 		'\t/* attributes */\n',
-		A.list (ATTRS, line_items)
+		A.list (ATTRS, lineItems)
 	);
 
-	function create_list (items, base_function) {
+	function createList (items, baseFunction) {
 		var list = [];
 
-		var def, function_name, item_name;
+		var def, functionName, itemName;
 
 		var item, ii, ni = items.length;
 		for (ii = 0; ii < ni; ii++) {
 			item = items[ii];
 
 			if (item instanceof RenamedItem) {
-				function_name = item.renamed;
-				item_name = item.original;
+				functionName = item.renamed;
+				itemName = item.original;
 
 			} else {
-				function_name = item_name = item;
+				functionName = itemName = item;
 			}
 
 			def = {};
 
-			def [FUNCTION_NAME] = function_name;
-			def [BASE_FUNCTION] = base_function;
-			def [ITEM_NAME] = item_name;
+			def [FUNCTION_NAME] = functionName;
+			def [BASE_FUNCTION] = baseFunction;
+			def [ITEM_NAME] = itemName;
 
 			list.push (def);
 		}
@@ -133,17 +133,17 @@ function generate_html_module_code () {
 		return list;
 	}
 
-	var tag_list = create_list (tags, 'tag');
+	var tagList = createList (tags, 'tag');
 
-	var attr_list = create_list (attrs, 'attr');
+	var attrList = createList (attrs, 'attr');
 
 	var params = A.params (A.placeholders.nothing)
-		.set (TAGS, tag_list)
-		.set (ATTRS, attr_list);
+		.set (TAGS, tagList)
+		.set (ATTRS, attrList);
 
 	var code = A.string (params, template);
 
 	out (code);
 }
 
-generate_html_module_code ();
+generateHtmlModuleCode ();

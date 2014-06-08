@@ -9,22 +9,22 @@
 module.exports = {
 
 	// empty string
-	empty_string: function empty_string (ignore) {
+	emptyString: function emptyString (ignore) {
 		return '';
 	},
 
 	// fail spectacularly
-	error       : function error (key) {
+	error: function error (key) {
 		throw new Error ('missing param ' + key);
 	},
 
 	// undefined
-	nothing     : function nothing (ignore) {
+	nothing: function nothing (ignore) {
 		return undefined;
 	},
 
 	// show key for debugging
-	show_key    : function show_key (key) {
+	showKey: function showKey (key) {
 		return '{$' + key + '}';
 	}
 

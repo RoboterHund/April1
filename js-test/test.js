@@ -3,31 +3,31 @@
 var test = function (options) {
 
 	return {
-		log_line: function (msg) {
+		logLine: function (msg) {
 			console.log (msg);
 		},
 
-		log_start: function () {
+		logStart: function () {
 			console.log ('start test \'' + options.name + '\'');
 		},
 
-		log_end: function () {
+		logEnd: function () {
 			console.log ('end test \'' + options.name + '\'');
 			console.log ('-------------------------------\n');
 		},
 
-		log_expected: function (value) {
-			this.log_line ('expected: ' + value);
+		logExpected: function (value) {
+			this.logLine ('expected: ' + value);
 		},
 
-		log_got: function (value) {
-			this.log_line ('     got: ' + value);
+		logGot: function (value) {
+			this.logLine ('     got: ' + value);
 		},
 
-		log_test: function (test) {
-			this.log_start ();
+		logTest: function (test) {
+			this.logStart ();
 			test ();
-			this.log_end ();
+			this.logEnd ();
 		}
 	};
 

@@ -2,26 +2,26 @@
 'use strict';
 
 var assert = require ('assert');
-var mod_test = require ('./test');
+var modTest = require ('./test');
 
-var msg_assert_expected_got = 'should be (expected === got)';
+var msgAssertExpectedGot = 'should be (expected === got)';
 
 var A = (function () {
-	var A1 = require ('../js/main');
+	var baseA = require ('../js/main');
 
-	A1.buffer_settings (
+	baseA.bufferSettings (
 		{
 			initialSize    : 64,
 			incrementAmount: 64
 		});
 
-	var item_group_builder = (function () {
+	var itemGroupBuilder = (function () {
 
 		function ItemGroup (
-			open_delimiter, close_delimiter, items) {
+			openDelimiter, closeDelimiter, items) {
 
-			this.to_template = function (factory) {
-				factory.put (open_delimiter);
+			this.aTemp = function (factory) {
+				factory.put (openDelimiter);
 				var sep = '';
 				var ia, na = items.length;
 				for (ia = 0; ia < na; ia++) {
@@ -29,32 +29,32 @@ var A = (function () {
 					factory.put (items [ia]);
 					sep = ', ';
 				}
-				factory.put (close_delimiter);
+				factory.put (closeDelimiter);
 			};
 		}
 
-		return function (open_delimiter, close_delimiter) {
+		return function (openDelimiter, closeDelimiter) {
 			return function () {
 				return new ItemGroup (
-					open_delimiter, close_delimiter, arguments);
+					openDelimiter, closeDelimiter, arguments);
 			};
 		};
 	} ());
 
-	A1.block = item_group_builder ('{', '}');
+	baseA.block = itemGroupBuilder ('{', '}');
 
-	A1.array = item_group_builder ('[', ']');
+	baseA.array = itemGroupBuilder ('[', ']');
 
-	return A1;
+	return baseA;
 } ());
 
 exports.test_1 = function (test) {
-	var tester = mod_test.test ({ name: 'templates 1' });
-	tester.log_test (
+	var tester = modTest.test ({ name: 'templates 1' });
+	tester.logTest (
 		function () {
 
 			var expected = '{1, 2, 3}';
-			tester.log_expected (expected);
+			tester.logExpected (expected);
 
 			var template = A.template (
 				A.block (
@@ -65,19 +65,19 @@ exports.test_1 = function (test) {
 			);
 			var got = A.string (template);
 
-			tester.log_got (got);
-			assert (expected === got, msg_assert_expected_got);
+			tester.logGot (got);
+			assert (expected === got, msgAssertExpectedGot);
 		});
 	test.done ();
 };
 
 exports.test_2 = function (test) {
-	var tester = mod_test.test ({ name: 'templates 2' });
-	tester.log_test (
+	var tester = modTest.test ({ name: 'templates 2' });
+	tester.logTest (
 		function () {
 
 			var expected = '{1, [10, 20], 3}';
-			tester.log_expected (expected);
+			tester.logExpected (expected);
 
 			var template = A.template (
 				A.block (
@@ -91,19 +91,19 @@ exports.test_2 = function (test) {
 			);
 			var got = A.string (template);
 
-			tester.log_got (got);
-			assert (expected === got, msg_assert_expected_got);
+			tester.logGot (got);
+			assert (expected === got, msgAssertExpectedGot);
 		});
 	test.done ();
 };
 
 exports.test_3 = function (test) {
-	var tester = mod_test.test ({ name: 'templates 3' });
-	tester.log_test (
+	var tester = modTest.test ({ name: 'templates 3' });
+	tester.logTest (
 		function () {
 
 			var expected = '{a, b}';
-			tester.log_expected (expected);
+			tester.logExpected (expected);
 
 			var template = A.template (
 				A.block (
@@ -116,8 +116,8 @@ exports.test_3 = function (test) {
 				.set ('2', 'b');
 			var got = A.string (params, template);
 
-			tester.log_got (got);
-			assert (expected === got, msg_assert_expected_got);
+			tester.logGot (got);
+			assert (expected === got, msgAssertExpectedGot);
 		});
 	test.done ();
 };

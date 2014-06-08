@@ -3,24 +3,24 @@
 var stream_buffers = require ('stream-buffers');
 
 // string generator constructor
-function StringGenerator (buffer_params) {
+function StringGenerator (bufferParams) {
 
 	// generator
 	var generator = this;
 
 	// string buffer
 	var buffer =
-		new stream_buffers.WritableStreamBuffer (buffer_params);
+		new stream_buffers.WritableStreamBuffer (bufferParams);
 
 	// parameters
 	this.params = null;
 
 	// consume input
-	// all arguments must implement to_string
+	// all arguments must implement aStr
 	this.put = function () {
 		var ia, na = arguments.length;
 		for (ia = 0; ia < na; ia++) {
-			arguments [ia].to_string (generator);
+			arguments [ia].aStr (generator);
 		}
 	};
 
@@ -30,9 +30,9 @@ function StringGenerator (buffer_params) {
 	};
 
 	// get final string
-	this.get_result = function () {
+	this.getResult = function () {
 		// join string parts
-		return buffer.getContentsAsString (buffer_params.encoding);
+		return buffer.getContentsAsString (bufferParams.encoding);
 	};
 }
 
