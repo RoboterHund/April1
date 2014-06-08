@@ -6,12 +6,15 @@ var stream_buffers = require ('stream-buffers');
 var FixedString = require ('./fixed_string');
 
 // template factory constructor
-function TemplateFactory (bufferParams) {
+function TemplateFactory (bufferParams, emitters) {
 	// factory
 	var factory = this;
 	var stringBuffer = null;
 
 	var parts = [];
+
+	// emitters
+	this.emitters = emitters;
 
 	// parameterizer
 	this.params = {

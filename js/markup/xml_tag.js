@@ -4,7 +4,9 @@
 var XmlAttribute = require ('./xml_attr');
 
 // XML tag builder constructor
-// 1st argument must be the tag name
+//
+// leading args must be:
+// 1: tag name
 function XmlTag (args) {
 
 	/**
@@ -12,8 +14,13 @@ function XmlTag (args) {
 	 * @param {TemplateFactory} factory
 	 */
 	this.aTemp = function (factory) {
-		factory.appendString ('<');
-		factory.put (args [0]);
+		/**
+		 * @type {XmlEmitter}
+		 */
+		var emitter = factory.emitters.xml;
+
+		var name = args [0];
+		emitter.start (factory, name);
 
 		var cont_items = [];
 
@@ -25,7 +32,7 @@ function XmlTag (args) {
 
 			if (arg instanceof XmlAttribute) {
 				// attribute
-				factory.put (arg);
+				emitter.attr (factory, arg);
 
 			} else {
 				// content
@@ -35,14 +42,12 @@ function XmlTag (args) {
 
 		if (cont_items.length > 0) {
 			// add content
-			factory.appendString ('>');
-
-			factory.put.apply (null, cont_items);
-
-			factory.put ('</', args [0], '>');
+			emitter.endAttrs (factory, false);
+			emitter.content (factory, cont_items);
+			emitter.endContent (factory, name);
 
 		} else {
-			factory.appendString ('/>');
+			emitter.endAttrs (factory, true);
 		}
 	};
 
