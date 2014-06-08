@@ -2,6 +2,8 @@ April1
 ======
 &copy; 2014 RoboterHund
 
+_Note_: experimental module, everything is subject to change.
+
 * * *
 
 **April1** is an *anti-template engine* for the Node.js platform.
@@ -12,7 +14,7 @@ template engine, except that the template is defined directly in code.
 Example:
 
 	var A = require ('april1');
-	var my_template = A.template (
+	var myTemplate = A.template (
 		A.body (
 			A.img (
 				A.src (A.include ('URL'))
@@ -28,12 +30,12 @@ The above code creates a reusable template.
 
 Values are supplied by a *parameterizer*. Example:
 
-    var my_params = A.params (A.placeholders.empty_string)
+    var myParams = A.params (A.placeholders.emptyString)
         .set ('URL', '/img/picture.png')
         .set ('ID', 'cont_42')
         .set ('TEXT', 'hello world');
 
-Now, the function call ``A.string (my_params, my_template)``
+Now, the function call ``A.string (myParams, myTemplate)``
 would *by default* return this string:
 
 	<body><img src="/img/picture.png"/><p id="cont_42">hello world</p></body>
@@ -69,10 +71,15 @@ that are identical or similar to each other.
 
 * ``list`` binds a subtemplate to an array of objects.
 
-    Test module ``html_templates_fixture`` demonstrates this.
+    Test module ``htmlTemplatesFixture`` demonstrates this.
 
 * * *
 
+``0.2.1``
+Switched to camelCase everywhere.
+
+`to_template` and `to_string` renamed to `aTemp` and `aStr`.
+
 *RoboterHund*  
-*2014/05/22*
+*2014/06/08*
 
