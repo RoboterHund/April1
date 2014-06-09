@@ -26,7 +26,7 @@ exports.test_1 = function (test) {
 			tester.logExpected (expected);
 
 			var keys = {
-				title  : 'HTML template test',
+				title: 'HTML template test',
 				message: 'Hello, Wörld!'
 			};
 
@@ -102,7 +102,7 @@ exports.test_2 = function (test) {
 						k: 'z'
 					}
 				],
-				v    : '-undefined-'
+				v: '-undefined-'
 			};
 
 			var template = A.template (

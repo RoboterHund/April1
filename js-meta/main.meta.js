@@ -2,12 +2,9 @@
 // HTML templates
 'use strict';
 
-function generateHtmlModuleCode () {
-	var out = function (arg) {
-		console.log (arg);
-	};
+function generateHtmlFunctionsCode (writeLine) {
 
-	var A = require ('../js/main');
+	var A = require ('../js/.main.meta.base');
 
 	function RenamedItem (original, renamed) {
 		this.original = original;
@@ -85,7 +82,7 @@ function generateHtmlModuleCode () {
 	var BASE_FUNCTION = 'BASE_FUNCTION';
 
 	var lineItems = A.group (
-		'\tA.',
+		'A.',
 		A.include (FUNCTION_NAME),
 		' = A.',
 		A.include (BASE_FUNCTION),
@@ -98,9 +95,9 @@ function generateHtmlModuleCode () {
 	var ATTRS = 'attrs';
 
 	var template = A.template (
-		'\t/* tags */\n',
+		'/* tags */\n',
 		A.list (TAGS, lineItems),
-		'\t/* attributes */\n',
+		'/* attributes */\n',
 		A.list (ATTRS, lineItems)
 	);
 
@@ -143,7 +140,36 @@ function generateHtmlModuleCode () {
 
 	var code = A.string (params, template);
 
-	out (code);
+	writeLine (code);
 }
 
-generateHtmlModuleCode ();
+var basePath = '../js/.main.meta.base.js';
+var outputPath = '../js/main.js';
+
+function mainGenerator (writeOutput) {
+
+	function readBaseLines () {
+		var fs = require ('fs');
+		var baseData = fs.readFileSync (basePath).toString ();
+		return baseData.split ('\n');
+	}
+
+	var baseLines = readBaseLines ();
+
+	// hack to avoid extra line at end of output
+	baseLines.pop ();
+
+	function processLine (text) {
+		if (text === '/* => HTML functions here */') {
+			console.log (text);
+			generateHtmlFunctionsCode (writeOutput);
+
+		} else {
+			writeOutput (text + '\n');
+		}
+	}
+
+	baseLines.forEach (processLine);
+}
+
+require ('./generate') (outputPath, mainGenerator);

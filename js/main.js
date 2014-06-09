@@ -190,8 +190,6 @@ A.doctype = function () {
 	return A.fixedString ('<!DOCTYPE html>');
 };
 
-// from /js-meta/html_templates.meta.js
-// (in repository)
 /* tags */
 A.html = A.tag.bind (undefined, 'html');
 A.head = A.tag.bind (undefined, 'head');
@@ -258,4 +256,3 @@ A.list = function () {
 };
 
 module.exports = A;
-

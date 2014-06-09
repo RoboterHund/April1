@@ -11,7 +11,7 @@ var A = (function () {
 
 	baseA.bufferSettings (
 		{
-			initialSize    : 64,
+			initialSize: 64,
 			incrementAmount: 64
 		});
 

@@ -1,6 +1,7 @@
 .idea/
-js-meta/
-js-test/
 April1.iml
 nunit.js
+js/.main.meta.base.js
+js-meta/
+js-test/
 README.md
