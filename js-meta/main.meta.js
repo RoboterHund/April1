@@ -140,7 +140,7 @@ function generateHtmlFunctionsCode (writeLine) {
 
 	var code = A.string (params, template);
 
-	writeLine (code);
+	writeLine ('\n' + code);
 }
 
 var basePath = '../js/.main.meta.base.js';
@@ -156,17 +156,16 @@ function mainGenerator (writeOutput) {
 
 	var baseLines = readBaseLines ();
 
-	// hack to avoid extra line at end of output
-	baseLines.pop ();
-
+	var sep = '';
 	function processLine (text) {
 		if (text === '/* => HTML functions here */') {
 			console.log (text);
 			generateHtmlFunctionsCode (writeOutput);
 
 		} else {
-			writeOutput (text + '\n');
+			writeOutput (sep + text);
 		}
+		sep = '\n';
 	}
 
 	baseLines.forEach (processLine);
