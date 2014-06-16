@@ -5,18 +5,17 @@
 
 'use strict';
 
-// import ./logic
-var ItemList = require ('./logic/item_list');
-
-// import ./markup
-var XmlAttribute = require ('./markup/xml_attr');
-var XmlTag = require ('./markup/xml_tag');
+// import ./xml
+var XmlFactory = require ('./xml/factory');
+var xmlTypes = require ('./xml/types');
 
 // import ./templates
-var FixedString = require ('./templates/fixed_string');
-var TemplateItemGroup = require ('./templates/group');
+var ConstantString = require ('./templates/constant_string');
+var Group = require ('./templates/group');
 var Include = require ('./templates/include');
+var ItemList = require ('./templates/item_list');
 var Parameterizer = require ('./templates/parameters');
+var SpecNode = require ('./templates/spec_node');
 var StringGenerator = require ('./templates/string_generator');
 var Template = require ('./templates/template');
 var TemplateFactory = require ('./templates/template_factory');
@@ -49,15 +48,6 @@ A.bufferSettings = function (settings) {
 
 /* *
  *
- * emitters
- */
-
-A.emitters = {
-	xml: require ('./markup/xml_tag_emitter')
-};
-
-/* *
- *
  * template fields
  */
 
@@ -78,12 +68,12 @@ A.include = function (key) {
 
 // check whether is fixed string
 A.isFixedString = function (arg) {
-	return arg instanceof FixedString;
+	return arg instanceof ConstantString;
 };
 
 // fixed string
 A.fixedString = function (string) {
-	return new FixedString (string);
+	return new ConstantString (string);
 };
 
 /* *
@@ -109,7 +99,7 @@ A.template = function () {
 
 // group of reusable template items
 A.group = function () {
-	return new TemplateItemGroup (arguments);
+	return new Group (arguments);
 };
 
 /* *
@@ -123,12 +113,13 @@ A.isParams = function (arg) {
 };
 
 // new parameterizer
-A.params = function (placeholder) {
-	return new Parameterizer (placeholder);
+A.params = function (getDefaultValueSupplier) {
+	return new Parameterizer (getDefaultValueSupplier ());
 };
 
-// placeholders
-A.placeholders = require ('./templates/placeholders');
+// default value suppliers
+A.defaultValue =
+	require ('./templates/default_value_suppliers');
 
 /* *
  *
@@ -146,8 +137,8 @@ A.generator = function () {
 };
 
 // generate string from arguments
-// all arguments must implement aStr (StringGenerator)
-A.string = function () {
+// all arguments must implement generate (StringGenerator)
+A.generate = function () {
 	var generator = new StringGenerator (bufferParams);
 
 	generator.put.apply (null, arguments);
@@ -160,24 +151,16 @@ A.string = function () {
  * XML
  */
 
-// check whether is XML tag
-A.isTag = function (arg) {
-	return arg instanceof XmlTag;
-};
-
 // XML tag
 A.tag = function (name) {
-	return new XmlTag (arguments);
-};
-
-// check whether is XML attribute
-A.isAttr = function (arg) {
-	return arg instanceof XmlAttribute;
+	return new SpecNode (
+		xmlTypes.XML_TAG, arguments);
 };
 
 // XML attribute
 A.attr = function (name, value) {
-	return new XmlAttribute (name, value);
+	return new SpecNode (
+		xmlTypes.XML_ATTR, arguments);
 };
 
 /* *

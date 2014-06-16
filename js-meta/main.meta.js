@@ -4,7 +4,7 @@
 
 function generateHtmlFunctionsCode (writeLine) {
 
-	var A = require ('../js/.main.meta.base');
+	var A = require ('../js/main.meta.base');
 
 	function RenamedItem (original, renamed) {
 		this.original = original;
@@ -134,7 +134,7 @@ function generateHtmlFunctionsCode (writeLine) {
 
 	var attrList = createList (attrs, 'attr');
 
-	var params = A.params (A.placeholders.nothing)
+	var params = A.params (A.defaultValue.nothing)
 		.set (TAGS, tagList)
 		.set (ATTRS, attrList);
 
@@ -143,32 +143,10 @@ function generateHtmlFunctionsCode (writeLine) {
 	writeLine ('\n' + code);
 }
 
-var basePath = '../js/.main.meta.base.js';
-var outputPath = '../js/main.js';
-
-function mainGenerator (writeOutput) {
-
-	function readBaseLines () {
-		var fs = require ('fs');
-		var baseData = fs.readFileSync (basePath).toString ();
-		return baseData.split ('\n');
+require ('./generate') (
+	'../js/main.meta.base.js',
+	'../js/main.js',
+	{
+		'/* => HTML functions here */': generateHtmlFunctionsCode
 	}
-
-	var baseLines = readBaseLines ();
-
-	var sep = '';
-	function processLine (text) {
-		if (text === '/* => HTML functions here */') {
-			console.log (text);
-			generateHtmlFunctionsCode (writeOutput);
-
-		} else {
-			writeOutput (sep + text);
-		}
-		sep = '\n';
-	}
-
-	baseLines.forEach (processLine);
-}
-
-require ('./generate') (outputPath, mainGenerator);
+);

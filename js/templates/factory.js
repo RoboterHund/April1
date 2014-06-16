@@ -3,30 +3,27 @@
 
 var stream_buffers = require ('stream-buffers');
 
-var FixedString = require ('./fixed_string');
+var ConstantString = require ('./constant_string');
+var Nothing =
+	require ('./default_value_suppliers').Nothing;
+var TemplateStart = require ('./template_start');
 
 // template factory constructor
-function TemplateFactory (bufferParams, emitters) {
-	// factory
-	var factory = this;
+function TemplateFactory (bufferParams) {
+
+	// this
+	var thisFactory = this;
+
 	var stringBuffer = null;
-
-	var parts = [];
-
-	// emitters
-	this.emitters = emitters;
+	var startNode = new TemplateStart ();
+	var lastNode = startNode;
 
 	// parameterizer
-	this.params = {
-		get: function (ignore) {
-			return undefined;
-		}
-	};
+	this.params = new Nothing ();
 
 	// finish pending actions
 	var finish = function () {
-
-		// join accumulated fixed string parts
+		// join accumulated constant string parts
 		var fixedString;
 		if (stringBuffer) {
 			fixedString = stringBuffer.getContentsAsString (
@@ -36,8 +33,8 @@ function TemplateFactory (bufferParams, emitters) {
 
 			if (fixedString.length > 0) {
 				// add to template
-				parts.push (
-					new FixedString (fixedString));
+				lastNode.next = new ConstantString (fixedString);
+				lastNode = lastNode.next;
 			}
 		}
 	};
@@ -45,7 +42,7 @@ function TemplateFactory (bufferParams, emitters) {
 	// consume input
 	// one item
 	var putOne = function (arg) {
-		if (arg.aTemp) {
+		if (arg.type) {
 			// generate template
 			arg.aTemp (factory);
 

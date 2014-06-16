@@ -2,48 +2,50 @@
 'use strict';
 
 // parameterizer constructor
-function Parameterizer (placeholder) {
+function Parameterizer (defaultValueSupplier, map) {
 
-	// parameterizer
-	var params = this;
-
-	// generate template
-	// set self as new parameterizer of factory
-	this.aTemp = function (factory) {
-		factory.params = params;
-	};
+	// this
+	var thisParams = this;
 
 	// generate string
 	// set self as new parameterizer of generator
-	this.aStr = function (generator) {
-		generator.params = params;
+	this.generate = function (generator) {
+		thisParams.outer = generator.params;
+		generator.params = thisParams;
 	};
+
+	// values
+	if (map !== undefined) {
+		// false values are allowed
+		// but must be replaced before calling get
+		this.map = map;
+
+	} else {
+		this.map = {};
+	}
+
+	// default value supplier
+	this.defaultValueSupplier = defaultValueSupplier;
 
 	// set value
 	this.set = function (key, value) {
-		params.map [key] = value;
+		thisParams.map [key] = value;
 
-		return params;
+		return thisParams;
 	};
 
 	// get value
 	this.get = function (key) {
-		var value = params.map [key];
+		var value = thisParams.map [key];
 
-		// value can be anything except undefined
 		if (value === undefined) {
-			// value is undefined, return placeholder
-			value = this.placeholder (key);
+			// value is undefined, get default value
+			value = thisParams.defaultValueSupplier (key);
 		}
 
 		return value;
 	};
 
-	// key-value map
-	this.map = {};
-
-	// get placeholder value
-	this.placeholder = placeholder;
 }
 
 module.exports = Parameterizer;

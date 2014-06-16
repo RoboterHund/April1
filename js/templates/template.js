@@ -1,23 +1,19 @@
 'use strict';
 
-// template constructor
-function Template (parts) {
+// constructor
+function Template (startNode) {
 
-	// generate template
-	this.aTemp = function (factory) {
-		var i, num_parts = parts.length;
-		for (i = 0; i < num_parts; i++) {
-			parts [i].aTemp (factory);
-		}
-	};
+	this.next = null;
 
-	// generate string
-	// feed each part to generator
-	this.aStr = function (generator) {
-		var i, num_parts = parts.length;
-		for (i = 0; i < num_parts; i++) {
-			parts [i].aStr (generator);
+	// generate
+	this.generate = function (generator) {
+		var node = startNode;
+
+		while (node) {
+			node = node.generate (generator);
 		}
+
+		return this.next;
 	};
 
 }

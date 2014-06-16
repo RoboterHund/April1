@@ -2,31 +2,57 @@
 'use strict';
 
 /**
- * @callback LineWriter
- * @param {string}
+ * read file lines
+ * replace certain lines with another content
+ * write resulting lines to another file
+ *
+ * @param basePath
+ * @param outputPath
+ * @param map_lineContent_replacementGenerator
+ *  map of line in base file to generator of replacement content
  */
+function generate (
+	basePath, outputPath, map_lineContent_replacementGenerator) {
 
-/**
- * @callback LinesGenerator
- * @param {LineWriter}
- */
-
-/**
- * write to file
- * @param {string} outputPath
- * @param {LinesGenerator} outputGenerator
- */
-function write (outputPath, outputGenerator) {
 	var fs = require ('fs');
-	var stream = fs.createWriteStream (outputPath);
 
-	function writeOutput (text) {
-		stream.write (text || '');
+	var baseLines = fs.readFileSync (basePath).toString ().split ('\n');
+
+	var writeStream = fs.createWriteStream (outputPath);
+
+	var sep = '';
+
+	function writeLine () {
+		writeStream.write (sep);
+
+		var arg, ia, na = arguments.length;
+		for (ia = 0; ia < na; ia++) {
+			arg = arguments [ia];
+
+			writeStream.write (arg);
+		}
+
+		sep = '\n';
 	}
 
-	outputGenerator (writeOutput);
+	function processLine (text) {
+		var replacementGenerator =
+			map_lineContent_replacementGenerator [text.trim ()];
 
-	stream.end ();
+		if (replacementGenerator) {
+			console.log (text);
+			replacementGenerator (writeLine);
+
+		} else {
+			writeLine (text);
+		}
+
+		sep = '\n';
+	}
+
+	baseLines.forEach (processLine);
+
+	writeStream.end ();
 }
 
-module.exports = write;
+module.exports = generate;

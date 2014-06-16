@@ -4,34 +4,21 @@
 // include constructor
 function Include (key) {
 
-	// include
-	var include = this;
+	// next node
+	this.next = null;
 
-	// generate template
-	this.aTemp = function (factory) {
-		var value = factory.params.get (key);
-
-		if (value !== undefined) {
-			// output value given by parameterizer
-			factory.put (value);
-
-		} else {
-			// output self
-			factory.appendPart (include);
-		}
-	};
-
-	// generate string
-	this.aStr = function (generator) {
+	// generate value
+	this.generate = function (generator) {
 		var value = generator.params.get (key);
-		if (value.aStr) {
-			// feed value to generator
-			value.aStr (generator);
+		if (value.generate) {
+			value.generate (generator);
 
 		} else {
 			// assume value is a string
-			generator.append (value);
+			generator.write (value);
 		}
+
+		return this.next;
 	};
 
 }
