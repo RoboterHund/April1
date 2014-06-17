@@ -3,13 +3,23 @@
 
 var stream_buffers = require ('stream-buffers');
 
-var ConstantString = require ('./constant_string');
+var typeUtils = require ('./type_utils');
+
+var ConstantString = require ('./nodes/constant_string');
+var Dispatcher = require ('./dispatcher');
 var Nothing =
-	require ('./default_value_suppliers').Nothing;
+	require ('./default_value_suppliers').nothing ();
 var TemplateStart = require ('./template_start');
 
-// template factory constructor
-function TemplateFactory (bufferParams) {
+/**
+ * template factory constructor
+ * @param bufferParams
+ * @param {TypeSet} stringTypes
+ * @param dispatch
+ * @constructor
+ */
+function TemplateFactory (
+	bufferParams, stringTypes, dispatch) {
 
 	// this
 	var thisFactory = this;
@@ -39,29 +49,28 @@ function TemplateFactory (bufferParams) {
 		}
 	};
 
-	// consume input
-	// one item
-	var putOne = function (arg) {
-		if (arg.type) {
-			// generate template
-			arg.aTemp (factory);
-
-		} else {
-			// add string
+	// process node
+	this.build = function (context, node) {
+		if (stringTypes.includes (node)) {
 			stringBuffer = stringBuffer
 				|| new stream_buffers
 					.WritableStreamBuffer (bufferParams);
-			stringBuffer.write (arg.toString ());
+			stringBuffer.write (node.toString ());
+
+		} else {
+			dispatch.build (node);
 		}
 	};
-	this.putOne = putOne;
 
-	// consume input
-	// many items
-	this.put = function () {
-		var ia, na = arguments.length;
-		for (ia = 0; ia < na; ia++) {
-			putOne (arguments [ia]);
+	/**
+	 * process nodes
+	 * @param context
+	 * @param nodes
+	 */
+	this.buildNodes = function (context, nodes) {
+		var ind, nnd = nodes.length;
+		for (ind = 0; ind < nnd; ind++) {
+			this.build (context, nodes[ind]);
 		}
 	};
 

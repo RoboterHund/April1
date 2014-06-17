@@ -1,5 +1,8 @@
-// xml spec node types
+// XML spec nodes
+'use strict';
+
+/* => constructors here */
 
 module.exports = {
-	/* => types here */
+	/* => exports here */
 };

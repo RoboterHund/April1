@@ -10,7 +10,7 @@ var XmlFactory = require ('./xml/factory');
 var xmlTypes = require ('./xml/types');
 
 // import ./templates
-var ConstantString = require ('./templates/constant_string');
+var ConstantString = require ('./templates/nodes/constant_string');
 var Group = require ('./templates/group');
 var Include = require ('./templates/include');
 var ItemList = require ('./templates/item_list');

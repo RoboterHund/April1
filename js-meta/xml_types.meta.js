@@ -1,20 +1,35 @@
 // xml spec node types
 'use strict';
 
-function generateCode (writeLine) {
+var types = [
+	'XmlAttr',
+	'XmlTag'
+];
 
-	var types = [
-		'XML_ATTR',
-		'XML_TAG'
-	];
+// generate constructors
+function generateConstructors (writeLine) {
+
+	function writeCode (item) {
+		writeLine (
+			"function ",
+			item,
+			" (subnodes) { this.sub = subnodes; }");
+		writeLine ();
+	}
+
+	require ('./iterator') (types, writeCode);
+}
+
+// generate exports
+function generateExports (writeLine) {
 
 	function writeCode (item, isLast) {
 		writeLine (
 			"\t",
 			item,
-			": '",
+			": ",
 			item,
-			!isLast ? "\'," : "\'");
+			!isLast ? "," : "");
 	}
 
 	require ('./iterator') (types, writeCode);
@@ -24,6 +39,7 @@ require ('./generate') (
 	'../js/xml/types.meta.base.js',
 	'../js/xml/types.js',
 	{
-		'/* => types here */': generateCode
+		'/* => constructors here */': generateConstructors,
+		'/* => exports here */': generateExports
 	}
 );

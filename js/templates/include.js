@@ -1,7 +1,8 @@
 // template field
+// template node
 'use strict';
 
-// include constructor
+// constructor
 function Include (key) {
 
 	// next node

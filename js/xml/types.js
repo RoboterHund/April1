@@ -1,6 +1,15 @@
-// xml spec node types
+// XML spec nodes
+'use strict';
+
+function XmlAttr (subnodes) {
+	this.sub = subnodes;
+}
+
+function XmlTag (subnodes) {
+	this.sub = subnodes;
+}
 
 module.exports = {
-	XML_ATTR: 'XML_ATTR',
-	XML_TAG: 'XML_TAG'
+	XmlAttr: XmlAttr,
+	XmlTag: XmlTag
 };

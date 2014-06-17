@@ -1,72 +1,62 @@
 // xml template factory
 'use strict';
 
-// node types
 var types = require ('./types');
+var typeUtils = require ('../templates/type_utils');
 
 /**
  * constructor
- * @param {Subfactories} sub
+ * @param {Dispatcher} dispatch
  * @constructor
  */
-function XmlFactory (sub) {
+function XmlFactory (dispatch) {
 
-	// this
-	var thisFactory = this;
-
-	// template
-	this.template = null;
-
-	// subnode factories
-
-	// build template
+	// process node
 	this.build = function (context, node) {
-		if (node.type === types.XML_TAG) {
-			sub.setContext (context, thisFactory);
+		var subnodes = node.sub;
+		var name = subnodes [0];
 
-			var nodeSub = node.sub;
-			var name = nodeSub [0];
+		dispatch.build ('<');
+		dispatch.build (name);
 
-			sub.build ('<');
-			sub.build (name);
+		var other_items = [];
 
-			var other_items = [];
+		// build attributes
+		var ip, np = subnodes.length;
+		var subnode;
+		for (ip = 1; ip < np; ip++) {
+			subnode = subnodes [ip];
 
-			// build attributes
-			var ip, np = nodeSub.length;
-			var param;
-			for (ip = 1; ip < np; ip++) {
-				param = nodeSub [ip];
+			if (typeUtils.isType (
+				subnode, types.XmlAttr)) {
 
-				if (param.type === types.XML_ATTR) {
-					sub.build (' ');
+				dispatch.build (' ');
 
-					// attribute name
-					sub.build (param.sub[0]);
+				// attribute name
+				dispatch.build (subnode.sub[0]);
 
-					// attribute value
-					var value = param.sub[1];
-					if (value) {
-						sub.build ('="');
-						sub.build (value);
-						sub.build ('="');
-					}
-				} else {
-					other_items.push (param);
+				// attribute value
+				var value = subnode.sub[1];
+				if (value) {
+					dispatch.build ('="');
+					dispatch.build (value);
+					dispatch.build ('="');
 				}
-			}
-
-			if (other_items.length > 0) {
-				// add content
-				sub.build ('>');
-				sub.buildNodes (other_items);
-				sub.build ('</');
-				sub.build (name);
-				sub.build ('>');
-
 			} else {
-				subBuild ('/>');
+				other_items.push (subnode);
 			}
+		}
+
+		if (other_items.length > 0) {
+			// add content
+			dispatch.build ('>');
+			dispatch.buildNodes (other_items);
+			dispatch.build ('</');
+			dispatch.build (name);
+			dispatch.build ('>');
+
+		} else {
+			dispatch.build ('/>');
 		}
 	};
 
