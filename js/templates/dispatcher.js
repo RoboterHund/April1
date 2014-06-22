@@ -1,47 +1,39 @@
-// node => factory dispatcher
+// node => builder dispatcher
 'use strict';
 
+var utils = require ('./utils');
+
 /**
- * @param context
- * @param map_class_factory
+ * @param map_type_builder
  * @constructor
  */
-function Dispatcher (context, map_class_factory) {
+function Dispatcher (map_type_builder) {
 
 	/**
-	 * replace context
-	 * @param newContext
+	 *
+	 * @param node
 	 * @returns {*}
 	 */
-	this.replaceContext = function (newContext) {
-		var prevContext = context;
-		context = newContext;
-		return prevContext;
+	this.getNodeBuilder = function (node) {
+		return map_type_builder [utils.nodeType (node)];
 	};
 
 	/**
 	 *
-	 * @param context
 	 * @param node
 	 */
 	this.build = function (node) {
 		// build node with the factory that corresponds
 		// to its type
-		map_class_factory [node.constructor.name]
-			.build (context, node);
+		map_type_builder [utils.nodeType (node)]
+			.build (node);
 	};
 
 	/**
 	 *
-	 * @param context
 	 * @param nodes
 	 */
-	this.buildNodes = function (nodes) {
-		var ind, nnd = nodes.length;
-		for (ind = 0; ind < nnd; ind++) {
-			this.build (nodes[ind]);
-		}
-	};
+	this.buildNodes = utils.bindBuildNodes (this);
 
 }
 

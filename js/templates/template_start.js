@@ -2,6 +2,7 @@
 'use strict';
 
 // constructor
+// delete this, replace with Template
 function TemplateStart () {
 
 	this.next = null;

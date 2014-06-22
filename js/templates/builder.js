@@ -3,33 +3,28 @@
 
 var stream_buffers = require ('stream-buffers');
 
-var typeUtils = require ('./type_utils');
-
 var ConstantString = require ('./nodes/constant_string');
-var Dispatcher = require ('./dispatcher');
-var Nothing =
-	require ('./default_value_suppliers').nothing ();
 var TemplateStart = require ('./template_start');
 
+var nothing = require ('./defaults').nothing ();
+var utils = require ('./utils');
+
 /**
- * template factory constructor
+ * template builder constructor
  * @param bufferParams
  * @param {TypeSet} stringTypes
  * @param dispatch
  * @constructor
  */
-function TemplateFactory (
+function TemplateBuilder (
 	bufferParams, stringTypes, dispatch) {
-
-	// this
-	var thisFactory = this;
 
 	var stringBuffer = null;
 	var startNode = new TemplateStart ();
 	var lastNode = startNode;
 
 	// parameterizer
-	this.params = new Nothing ();
+	this.params = nothing;
 
 	// finish pending actions
 	var finish = function () {
@@ -50,7 +45,7 @@ function TemplateFactory (
 	};
 
 	// process node
-	this.build = function (context, node) {
+	this.build = function (node) {
 		if (stringTypes.includes (node)) {
 			stringBuffer = stringBuffer
 				|| new stream_buffers
@@ -63,39 +58,22 @@ function TemplateFactory (
 	};
 
 	/**
-	 * process nodes
-	 * @param context
+	 *
 	 * @param nodes
 	 */
-	this.buildNodes = function (context, nodes) {
-		var ind, nnd = nodes.length;
-		for (ind = 0; ind < nnd; ind++) {
-			this.build (context, nodes[ind]);
-		}
-	};
+	this.buildNodes = utils.bindBuildNodes (this);
 
-	// add segment of fixed string part
-	this.appendString = function (string) {
-		stringBuffer = stringBuffer
-			|| new stream_buffers
-				.WritableStreamBuffer (bufferParams);
-		stringBuffer.write (string);
-	};
-
-	// add part, not a fixed string
-	// the part must implement aStr
-	// or the template won't work
-	this.appendPart = function (part) {
-		finish ();
-		parts.push (part);
-	};
-
-	// get final result
+	// get template
 	// must be the last method called
-	this.getResult = function () {
+	this.getTemplate = function () {
 		finish ();
-		return parts;
+
+		// invalidate self
+		lastNode = null;
+
+		return startNode;
 	};
+
 }
 
-module.exports = TemplateFactory;
+module.exports = TemplateBuilder;

@@ -8,7 +8,7 @@ function TemplateItemGroup (items) {
 
 	/**
 	 *
-	 * @param {TemplateFactory} factory
+	 * @param {TemplateBuilder} factory
 	 */
 	this.aTemp = function (factory) {
 		factory.put.apply (null, items);

@@ -1,6 +1,7 @@
 'use strict';
 
 // constructor
+// merge this with TemplateStart
 function Template (startNode) {
 
 	this.next = null;

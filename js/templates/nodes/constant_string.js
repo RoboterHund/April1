@@ -1,8 +1,12 @@
-// fixed string
+// constant string
 // template node
 'use strict';
 
-// constructor
+/**
+ *
+ * @param string
+ * @constructor
+ */
 function ConstantString (string) {
 
 	// next template node
@@ -10,8 +14,8 @@ function ConstantString (string) {
 
 	// generate string
 	// add string
-	this.generate = function (generator) {
-		generator.write (string);
+	this.generate = function (consumer) {
+		consumer.write (string);
 		return this.next;
 	};
 

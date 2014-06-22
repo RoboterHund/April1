@@ -6,19 +6,16 @@
 'use strict';
 
 // import ./xml
-var XmlFactory = require ('./xml/factory');
 var xmlTypes = require ('./xml/types');
 
 // import ./templates
 var ConstantString = require ('./templates/nodes/constant_string');
 var Group = require ('./templates/group');
-var Include = require ('./templates/include');
-var ItemList = require ('./templates/item_list');
 var Parameterizer = require ('./templates/parameters');
 var SpecNode = require ('./templates/spec_node');
 var StringGenerator = require ('./templates/string_generator');
 var Template = require ('./templates/template');
-var TemplateFactory = require ('./templates/template_factory');
+var TemplateFactory = require ('./templates/types');
 
 // April1 module stub
 var A = {};
@@ -87,14 +84,14 @@ A.isTemplate = function (arg) {
 };
 
 // generate template from arguments
-// all arguments must implement aTemp (TemplateFactory)
+// all arguments must implement aTemp (TemplateBuilder)
 A.template = function () {
 	// create new factory
 	var factory = new TemplateFactory (bufferParams, A.emitters);
 
 	factory.put.apply (null, arguments);
 
-	return new Template (factory.getResult ());
+	return new Template (factory.getTemplate ());
 };
 
 // group of reusable template items
@@ -119,7 +116,7 @@ A.params = function (getDefaultValueSupplier) {
 
 // default value suppliers
 A.defaultValue =
-	require ('./templates/default_value_suppliers');
+	require ('./templates/defaults');
 
 /* *
  *
@@ -143,7 +140,7 @@ A.generate = function () {
 
 	generator.put.apply (null, arguments);
 
-	return generator.getResult ();
+	return generator.getTemplate ();
 };
 
 /* *

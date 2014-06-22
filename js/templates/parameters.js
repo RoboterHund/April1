@@ -2,7 +2,7 @@
 'use strict';
 
 // parameterizer constructor
-function Parameterizer (defaultValueSupplier, map) {
+function Parameterizer (superior, map) {
 
 	// this
 	var thisParams = this;
@@ -16,16 +16,11 @@ function Parameterizer (defaultValueSupplier, map) {
 
 	// values
 	if (map !== undefined) {
-		// false values are allowed
-		// but must be replaced before calling get
 		this.map = map;
 
 	} else {
 		this.map = {};
 	}
-
-	// default value supplier
-	this.defaultValueSupplier = defaultValueSupplier;
 
 	// set value
 	this.set = function (key, value) {
@@ -39,11 +34,15 @@ function Parameterizer (defaultValueSupplier, map) {
 		var value = thisParams.map [key];
 
 		if (value === undefined) {
-			// value is undefined, get default value
-			value = thisParams.defaultValueSupplier (key);
+			value = superior (key);
 		}
 
 		return value;
+	};
+
+	// get superior parameterizer
+	this.getSuperior = function () {
+		return superior;
 	};
 
 }

@@ -2,21 +2,23 @@
 'use strict';
 
 var types = require ('./types');
-var typeUtils = require ('../templates/type_utils');
+var utils = require ('../templates/utils');
 
 /**
  * constructor
  * @param {Dispatcher} dispatch
  * @constructor
  */
-function XmlFactory (dispatch) {
+function XmlBuilder (dispatch) {
 
 	// process node
-	this.build = function (context, node) {
+	this.build = function (node) {
 		var subnodes = node.sub;
 		var name = subnodes [0];
 
-		dispatch.build ('<');
+		var stringBuilder = dispatch.getNodeBuilder (node);
+
+		stringBuilder.build ('<');
 		dispatch.build (name);
 
 		var other_items = [];
@@ -27,10 +29,9 @@ function XmlFactory (dispatch) {
 		for (ip = 1; ip < np; ip++) {
 			subnode = subnodes [ip];
 
-			if (typeUtils.isType (
-				subnode, types.XmlAttr)) {
+			if (utils.isType (subnode, types.XmlAttr)) {
 
-				dispatch.build (' ');
+				stringBuilder.build (' ');
 
 				// attribute name
 				dispatch.build (subnode.sub[0]);
@@ -38,9 +39,9 @@ function XmlFactory (dispatch) {
 				// attribute value
 				var value = subnode.sub[1];
 				if (value) {
-					dispatch.build ('="');
+					stringBuilder.build ('="');
 					dispatch.build (value);
-					dispatch.build ('="');
+					stringBuilder.build ('="');
 				}
 			} else {
 				other_items.push (subnode);
@@ -49,17 +50,23 @@ function XmlFactory (dispatch) {
 
 		if (other_items.length > 0) {
 			// add content
-			dispatch.build ('>');
+			stringBuilder.build ('>');
 			dispatch.buildNodes (other_items);
-			dispatch.build ('</');
+			stringBuilder.build ('</');
 			dispatch.build (name);
-			dispatch.build ('>');
+			stringBuilder.build ('>');
 
 		} else {
-			dispatch.build ('/>');
+			stringBuilder.build ('/>');
 		}
 	};
 
+	/**
+	 *
+	 * @param nodes
+	 */
+	this.buildNodes = utils.bindBuildNodes (this);
+
 }
 
-module.exports = XmlFactory;
+module.exports = XmlBuilder;

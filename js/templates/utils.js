@@ -32,9 +32,30 @@ function newTypeSet () {
 	return new TypeSet ();
 }
 
+/**
+ *
+ * @param nodes
+ */
+function buildNodes (nodes) {
+	var ind, nnd = nodes.length;
+	for (ind = 0; ind < nnd; ind++) {
+		//noinspection JSHint
+		this.build (nodes[ind]);
+	}
+}
+
+/**
+ *
+ * @param builder
+ */
+function bindBuildNodes (builder) {
+	return buildNodes.bind (builder);
+}
+
 module.exports = {
 	nodeType: nodeType,
 	type: type,
 	isType: isType,
-	typeSet: newTypeSet
+	typeSet: newTypeSet,
+	bindBuildNodes: bindBuildNodes
 };
