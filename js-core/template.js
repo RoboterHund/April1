@@ -1,8 +1,16 @@
 //
 'use strict';
 
-function StringNode (next, string) {
-	this.next = next;
+function TemplateHead () {
+    this.next = null;
+
+    this.out = function () {
+        return this.next;
+    };
+}
+
+function StringNode (string) {
+    this.next = null;
 
 	this.out = function (output) {
 		output.write (this.string);
@@ -12,8 +20,8 @@ function StringNode (next, string) {
 	this.string = string;
 }
 
-function InsertNode (next, key) {
-	this.next = next;
+function InsertNode (key) {
+    this.next = null;
 
 	this.out = function (output) {
 		var value = output.param (this.key);
@@ -30,8 +38,8 @@ function InsertNode (next, key) {
 	this.key = key;
 }
 
-function ListNode (next, key, template) {
-	this.next = next;
+function ListNode (key, template) {
+    this.next = null;
 
 	this.out = function (output) {
 		var items = output.param (this.key);
@@ -52,7 +60,8 @@ function ListNode (next, key, template) {
 }
 
 module.exports = {
-	string: StringNode,
-	insert: InsertNode,
-	list: ListNode
+    TemplateHead: TemplateHead,
+    StringNode: StringNode,
+    InsertNode: InsertNode,
+    ListNode: ListNode
 };

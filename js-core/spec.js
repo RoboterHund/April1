@@ -3,12 +3,22 @@
 
 var types = require ('./types');
 var GROUP = types.GROUP;
+var SENTINEL = types.SENTINEL;
 var TERM = types.TERM;
+
+function createNode (type, sub) {
+    return {
+        type: type,
+        sub: sub,
+        last: null,
+        next: null
+    };
+}
 
 function appendGroup (head, group) {
 	if (group.sub) {
 		head.next = group.sub;
-		return group.next;
+        return group.last;
 	} else {
 		return head;
 	}
@@ -30,11 +40,7 @@ function listArgs (head, args) {
 				}
 
 			} else {
-				head.next = {
-					type: TERM,
-					sub: arg,
-					next: null
-				};
+                head.next = createNode (TERM, arg);
 			}
 			head = head.next;
 		}
@@ -47,13 +53,9 @@ function listArgs (head, args) {
 }
 
 function node () {
-	var newNode = {
-		type: this.type,
-		sub: null,
-		next: null
-	};
+    var newNode = createNode (this.type, null);
 
-	listArgs (this.argHead);
+    newNode.last = listArgs (this.argHead);
 	newNode.sub = this.argHead.next;
 
 	return newNode;
@@ -64,39 +66,18 @@ function NodeBuilder (type) {
 	this.node = node.bind (this);
 }
 
-NodeBuilder.prototype.argHead = {
-	type: null,
-	sub: null,
-	next: null
-};
+NodeBuilder.prototype.argHead =
+    createNode (SENTINEL, null);
 
 function define (type) {
 	return new NodeBuilder (type);
 }
 
-function defineGroupBuilder () {
-	var groupBuilder = define (GROUP);
-
-	groupBuilder.node = function () {
-		var newNode = {
-			type: this.type,
-			sub: null,
-			next: null
-		};
-
-		newNode.next = listArgs (this.argHead);
-		newNode.sub = this.argHead.next;
-
-		return newNode;
-	}
-
-	return groupBuilder;
-}
-
-var group = defineGroupBuilder ();
 
 module.exports = {
 	node: node,
 	define: define,
-	group: group
+    group: define (GROUP),
+    insert: define (types.INSERT),
+    list: define (types.LIST)
 };

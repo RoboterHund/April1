@@ -16,8 +16,8 @@ Output.prototype.param = function (key) {
 	return this.params.get (key);
 };
 
-Output.prototype.pushParams = function () {
-	var newParams = parameterizer (this.params);
+Output.prototype.pushParams = function (map) {
+    var newParams = parameterizer (this.params, map);
 	this.params = newParams;
 };
 
