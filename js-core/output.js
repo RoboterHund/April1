@@ -1,7 +1,7 @@
 //
 'use strict';
 
-var parameterizer = require ('./params').params;
+var Parameterizer = require ('./params').Parameterizer;
 
 function Output (consumer, params) {
 	this.consumer = consumer;
@@ -17,8 +17,7 @@ Output.prototype.param = function (key) {
 };
 
 Output.prototype.pushParams = function (map) {
-    var newParams = parameterizer (this.params, map);
-	this.params = newParams;
+	this.params = new Parameterizer (this.params, map);
 };
 
 Output.prototype.setParams = function (map) {

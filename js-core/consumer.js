@@ -4,7 +4,7 @@
 var buffers = require ('stream-buffers');
 
 function Consumer (bufferParams) {
-    this.buffer = new buffers.WritableStreamBuffer (bufferParams);
+	this.buffer = new buffers.WritableStreamBuffer (bufferParams);
 
 	this.write = function (string) {
 		this.buffer.write (string);

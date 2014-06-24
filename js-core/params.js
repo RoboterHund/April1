@@ -15,11 +15,6 @@ function Parameterizer (superior, map) {
 	};
 }
 
-function params (superior, map) {
-	return new Parameterizer (superior, map);
-}
-
 module.exports = {
-	Parameterizer: Parameterizer,
-	params: params
+	Parameterizer: Parameterizer
 };

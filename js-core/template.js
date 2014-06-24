@@ -2,15 +2,15 @@
 'use strict';
 
 function TemplateHead () {
-    this.next = null;
+	this.next = null;
 
-    this.out = function () {
-        return this.next;
-    };
+	this.out = function () {
+		return this.next;
+	};
 }
 
 function StringNode (string) {
-    this.next = null;
+	this.next = null;
 
 	this.out = function (output) {
 		output.write (this.string);
@@ -21,7 +21,7 @@ function StringNode (string) {
 }
 
 function InsertNode (key) {
-    this.next = null;
+	this.next = null;
 
 	this.out = function (output) {
 		var value = output.param (this.key);
@@ -39,7 +39,7 @@ function InsertNode (key) {
 }
 
 function ListNode (key, template) {
-    this.next = null;
+	this.next = null;
 
 	this.out = function (output) {
 		var items = output.param (this.key);
@@ -60,8 +60,8 @@ function ListNode (key, template) {
 }
 
 module.exports = {
-    TemplateHead: TemplateHead,
-    StringNode: StringNode,
-    InsertNode: InsertNode,
-    ListNode: ListNode
+	TemplateHead: TemplateHead,
+	StringNode: StringNode,
+	InsertNode: InsertNode,
+	ListNode: ListNode
 };

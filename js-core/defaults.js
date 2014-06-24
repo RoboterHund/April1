@@ -3,47 +3,44 @@
 
 var Parameterizer = require ('./params').Parameterizer;
 
+var emptyParams = new Parameterizer (null, null);
+
 // empty string
-function emptyString (ignore) {
-	return '';
+function EmptyString () {
+	this.get = function (ignore) {
+		return '';
+	};
 }
+EmptyString.prototype = emptyParams;
 
 // fail spectacularly
-function missingParamError (key) {
-	throw new Error ('missing param ' + key);
+function MissingParamError () {
+	this.get = function (key) {
+		throw new Error ('missing param ' + key);
+	};
 }
+MissingParamError.prototype = emptyParams;
 
 // undefined
-function nothing (ignore) {
-	return undefined;
+function Nothing () {
+	this.get = function (ignore) {
+		return undefined;
+	};
 }
+Nothing.prototype = emptyParams;
 
 // show key for debugging
-function showKey (key) {
-	return '{$' + key + '}';
+function ShowKey () {
+	this.get = function (key) {
+		return '{$' + key + '}';
+	};
 }
-
-function defaults (get) {
-	var params = new Parameterizer (null, null);
-	params.get = get;
-	return params;
-}
+ShowKey.prototype = emptyParams;
 
 //noinspection JSUnusedGlobalSymbols
 module.exports = {
-	emptyString: function () {
-		return defaults (emptyString);
-	},
-
-	missingParamError: function () {
-		return defaults (missingParamError);
-	},
-
-	nothing: function () {
-		return defaults (nothing);
-	},
-
-	showKey: function () {
-		return defaults (showKey);
-	}
+	EmptyString: EmptyString,
+	MissingParamError: MissingParamError,
+	Nothing: Nothing,
+	ShowKey: ShowKey
 };
