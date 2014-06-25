@@ -37,7 +37,6 @@ function ShowKey () {
 }
 ShowKey.prototype = emptyParams;
 
-//noinspection JSUnusedGlobalSymbols
 module.exports = {
 	EmptyString: EmptyString,
 	MissingParamError: MissingParamError,

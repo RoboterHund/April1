@@ -1,15 +1,13 @@
 {
-	"name": "april1",
-	"version": "0.2.2-dev",
-	"description": "anti-templates engine",
-	"keywords": ["template", "templates", "xml", "html"],
+	"name": "april1-core",
+	"version": "0.0.1",
+	"description": "April1 core",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/RoboterHund/April1.git"
 	},
-	"main": "./js/main",
+	"main": "./main",
 	"dependencies": {
-		"stream-buffers": "0.2.5"
 	},
 	"author": "Alexander Diaz Chub <roboterhund@gmail.com>"
 }
