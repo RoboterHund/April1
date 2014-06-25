@@ -27,7 +27,7 @@ function InsertNode (key) {
 		var value = output.param (this.key);
 
 		if (value.out) {
-			value.out (output);
+			output.generate (value);
 		} else {
 			output.write (value);
 		}
@@ -48,7 +48,7 @@ function ListNode (key, template) {
 		output.pushParams ();
 		for (i = 0; i < n; i++) {
 			output.setParams (items [i]);
-			this.template.out (output);
+			output.generate (this.template);
 		}
 		output.popParams ();
 

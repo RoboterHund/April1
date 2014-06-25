@@ -1,8 +1,8 @@
 // parameterizer
 'use strict';
 
-function Parameterizer (superior, map) {
-	this.superior = superior;
+function Parameterizer (map) {
+	this.superParams = null;
 	this.map = map;
 
 	this.get = function (key) {
@@ -10,10 +10,17 @@ function Parameterizer (superior, map) {
 		if (value !== undefined) {
 			return value;
 		} else {
-			return(this.superior.get (key));
+			return(this.superParams.get (key));
 		}
 	};
 }
+
+Parameterizer.prototype.superior = function (superior) {
+	if (superior !== undefined) {
+		this.superParams = superior;
+	}
+	return this.superParams;
+};
 
 module.exports = {
 	Parameterizer: Parameterizer

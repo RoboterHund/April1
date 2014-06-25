@@ -2,7 +2,8 @@
 'use strict';
 
 module.exports = {
-	GROUP: 'GROUP',
 	INSERT: 'INSERT',
-	LIST: 'LIST'
+	LIST: 'LIST',
+	MACRO: 'MACRO',
+	TERM: 'TERM'
 };

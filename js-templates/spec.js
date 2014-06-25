@@ -2,23 +2,23 @@
 'use strict';
 
 var core = require ('../core.main');
-var node = core.spec.node;
+var BaseNode = core.spec.BaseNode;
 var types = core.types;
 
-function group () {
-	return node (types.GROUP, arguments);
+function macro () {
+	return new BaseNode (types.MACRO, arguments);
 }
 
 function insert () {
-	return node (types.INSERT, arguments);
+	return new BaseNode (types.INSERT, arguments);
 }
 
 function list () {
-	return node (types.LIST, arguments);
+	return new BaseNode (types.LIST, arguments);
 }
 
 module.exports = {
-	group: group,
 	insert: insert,
-	list: list
+	list: list,
+	macro: macro
 };

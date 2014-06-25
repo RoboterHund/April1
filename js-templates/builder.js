@@ -33,26 +33,14 @@ Builder.prototype.append = function (node) {
 };
 
 Builder.prototype.build = function (node) {
-	if (node.type) {
-		this.dispatch [node.type] (this, node.sub);
-	} else {
-		if (!this.buffer) {
-			this.buffer =
-				new WritableStreamBuffer (this.bufferParams);
-			this.buffer.write (node.toString ());
-		}
+	while (node) {
+		this.dispatch [node.type] (this, node);
+		node = node.next;
 	}
+	return this.head;
 };
 
 var dispatch = {};
-
-dispatch [types.GROUP] = function (builder, subs) {
-	var i;
-	var n = subs.length;
-	for (i = 0; i < n; i++) {
-		builder.build (subs [i]);
-	}
-};
 
 dispatch [types.INSERT] = function (builder, subs) {
 	builder.finishConstant ();
@@ -61,9 +49,17 @@ dispatch [types.INSERT] = function (builder, subs) {
 
 dispatch [types.LIST] = function (builder, subs) {
 	builder.finishConstant ();
-	var key = subs [0];
-	var template = subs [1];
+	var key = subs.sub;
+	var template = builder.build (subs.next);
 	builder.append (new template.ListNode (key, template));
+};
+
+dispatch [types.TERM] = function (builder, arg) {
+	if (!builder.buffer) {
+		builder.buffer =
+			new WritableStreamBuffer (this.bufferParams);
+	}
+	builder.buffer.write (arg.toString ());
 };
 
 Builder.prototype.dispatch = dispatch;
