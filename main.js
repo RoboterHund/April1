@@ -2,11 +2,11 @@
 'use strict';
 
 module.exports = {
-	consumer: require ('./core-modulez/consumer'),
-	defaults: require ('./core-modulez/defaults'),
-	output: require ('./core-modulez/output'),
-	params: require ('./core-modulez/params'),
-	spec: require ('./core-modulez/spec'),
-	template: require ('./core-modulez/template'),
-	types: require ('./core-modulez/types')
+	consumer: require ('./modules/consumer'),
+	defaults: require ('./modules/defaults'),
+	output: require ('./modules/output'),
+	params: require ('./modules/params'),
+	spec: require ('./modules/spec'),
+	template: require ('./modules/template'),
+	types: require ('./modules/types')
 };
