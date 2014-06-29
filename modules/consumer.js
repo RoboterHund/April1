@@ -4,24 +4,37 @@
 var buffers = require ('stream-buffers');
 
 function Consumer (bufferParams) {
-	this.buffer = new buffers.WritableStreamBuffer (bufferParams);
+	this.bufferParams = bufferParams;
+	this.buffer = null;
 
 	this.write = function (data) {
 		this.buffer.write (data.toString ());
 	};
+}
 
-	this.getString = function () {
-		var string =
-			this.buffer.getContentsAsString (
-				bufferParams.encoding);
+Consumer.prototype.init = function () {
+	this.buffer =
+		new buffers.WritableStreamBuffer (this.bufferParams);
+};
 
-		this.buffer.destroy ();
-		this.buffer = null;
+Consumer.prototype.getString = function () {
+	var string =
+		this.buffer.getContentsAsString (
+			this.bufferParams.encoding);
 
-		return string;
-	};
+	this.buffer.destroy ();
+	this.buffer = null;
+
+	return string;
+};
+
+function consumer (bufferParams) {
+	var ret = new Consumer (bufferParams);
+	ret.init ();
+	return  ret;
 }
 
 module.exports = {
-	Consumer: Consumer
+	Consumer: Consumer,
+	consumer: consumer
 };

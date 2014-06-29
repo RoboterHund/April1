@@ -3,43 +3,45 @@
 
 var Parameterizer = require ('./params').Parameterizer;
 
-var emptyParams = new Parameterizer (null, null);
-
 // empty string
-function EmptyString () {
-	this.get = function (ignore) {
+function emptyString () {
+	var params = new Parameterizer (null, null);
+	params.get = function (ignore) {
 		return '';
 	};
+	return params;
 }
-EmptyString.prototype = emptyParams;
 
 // fail spectacularly
-function MissingParamError () {
-	this.get = function (key) {
+function missingParamError () {
+	var params = new Parameterizer (null, null);
+	params.get = function (key) {
 		throw new Error ('missing param ' + key);
 	};
+	return params;
 }
-MissingParamError.prototype = emptyParams;
 
 // undefined
-function Nothing () {
-	this.get = function (ignore) {
+function nothing () {
+	var params = new Parameterizer (null, null);
+	params.get = function (ignore) {
 		return undefined;
 	};
+	return params;
 }
-Nothing.prototype = emptyParams;
 
 // show key for debugging
-function ShowKey () {
-	this.get = function (key) {
+function showKey () {
+	var params = new Parameterizer (null, null);
+	params.get = function (key) {
 		return '{$' + key + '}';
 	};
+	return params;
 }
-ShowKey.prototype = emptyParams;
 
 module.exports = {
-	EmptyString: EmptyString,
-	MissingParamError: MissingParamError,
-	Nothing: Nothing,
-	ShowKey: ShowKey
+	emptyString: emptyString,
+	missingParamError: missingParamError,
+	nothing: nothing,
+	showKey: showKey
 };

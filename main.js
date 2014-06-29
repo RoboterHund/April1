@@ -2,6 +2,7 @@
 'use strict';
 
 module.exports = {
+	builder: require ('./modules/builder'),
 	consumer: require ('./modules/consumer'),
 	defaults: require ('./modules/defaults'),
 	output: require ('./modules/output'),

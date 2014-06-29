@@ -11,7 +11,7 @@ Parameterizer.prototype.get = function (key) {
 	if (value !== undefined) {
 		return value;
 	} else {
-		return(this.outside.get (key));
+		return this.outside.get (key);
 	}
 };
 
