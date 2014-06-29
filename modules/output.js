@@ -16,6 +16,11 @@ Output.prototype.generate = function (template) {
 	}
 };
 
+Output.prototype.string = function () {
+	this.generate ();
+	return this.consumer.getString ();
+};
+
 Output.prototype.write = function (data) {
 	this.consumer.write (data);
 };

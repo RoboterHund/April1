@@ -9,6 +9,7 @@ var WritableStreamBuffer =
 function TemplateBuilder (params) {
 	this.params = params;
 	this.states = null;
+	this.dispatch = null;
 	this.head = null;
 	this.node = null;
 	this.buffer = null;
@@ -31,20 +32,8 @@ TemplateBuilder.prototype.setState = function (state) {
 	this.dispatch = this.states [state];
 };
 
-/**
- *
- * @param {SpecNode} node
- * @returns {exports.TemplateHead}
- */
 TemplateBuilder.prototype
-	.build = function (node) {
-
-	this.buildNodes (node.sub, 0, node.sub.length);
-	return this.head;
-};
-
-TemplateBuilder.prototype
-	.buildNodes = function (nodes, from, to) {
+	.build = function (nodes, from, to) {
 
 	var i = from || 0;
 	var end = to || nodes.length;
@@ -54,6 +43,7 @@ TemplateBuilder.prototype
 		this.dispatch [node.type] (this, node.sub);
 		i++;
 	}
+	return this.head;
 };
 
 TemplateBuilder.prototype
@@ -78,7 +68,7 @@ TemplateBuilder.prototype
 
 	if (this.buffer) {
 		var string = this.buffer.getContentsAsString (
-			this.params.encoding);
+			this.params.buffer.encoding);
 		this.buffer.destroy ();
 		this.buffer = null;
 		if (string.length > 0) {
@@ -102,13 +92,12 @@ function list (builder, sub) {
 	builder.finishConstant ();
 	var key = sub [0];
 	var subBuilder = builder.getSubBuilder ();
-	var template = subBuilder.buildNodes (
-		sub, 1);
+	var template = subBuilder.build (sub, 1);
 	builder.append (new template.ListNode (key, template));
 }
 
 function macro (builder, sub) {
-	builder.buildNodes (sub);
+	builder.build (sub);
 }
 
 function term (builder, sub) {
