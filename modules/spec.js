@@ -23,7 +23,22 @@ function specNode (type, args) {
 	return new SpecNode (type, args);
 }
 
+function nodeBuilder () {
+	return specNode (this, arguments);
+}
+
+function createNodeBuilder (type) {
+	return nodeBuilder.bind (type);
+}
+
+function termArg (sub, index) {
+	return sub [index].sub;
+}
+
 module.exports = {
+	createNodeBuilder: createNodeBuilder,
+	nodeBuilder: nodeBuilder,
 	SpecNode: SpecNode,
-	specNode: specNode
+	specNode: specNode,
+	termArg: termArg
 };

@@ -3,7 +3,9 @@
 
 var builder = require ('./builder');
 var consumer = require ('./consumer');
+var defaults = require ('./defaults');
 var output = require ('./output');
+var parameterizer = require ('./params');
 var spec = require ('./spec');
 var types = require ('./types');
 
@@ -43,15 +45,20 @@ var params = {
 function template () {
 	var templateBuilder = builder.templateBuilder (params);
 	var nodes = spec.specNode (types.MACRO, arguments);
-	return templateBuilder.build (nodes.sub);
+	templateBuilder.build (nodes.sub);
+	return templateBuilder.getTemplate ();
 }
 
 // common output generator
 
-function string (template, params) {
+function string (template, paramsMap) {
 	var writer = consumer.consumer (params.buffer);
+	var templateParams =
+		parameterizer.params (
+			paramsMap, defaults.missingParamError ());
 	var generator =
-		new output.Output (writer, template, params);
+		new output.Output (
+			writer, template, templateParams);
 	return generator.string ();
 }
 

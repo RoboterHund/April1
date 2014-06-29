@@ -15,6 +15,11 @@ Parameterizer.prototype.get = function (key) {
 	}
 };
 
+function params (map, outside) {
+	return new Parameterizer (map, outside);
+}
+
 module.exports = {
-	Parameterizer: Parameterizer
+	Parameterizer: Parameterizer,
+	params: params
 };

@@ -43,7 +43,8 @@ function ListNode (key, template) {
 
 	this.out = function (output) {
 		var items = output.param (this.key);
-		var i, n = items.length;
+		var i;
+		var n = items.length;
 
 		output.pushParams ();
 		for (i = 0; i < n; i++) {

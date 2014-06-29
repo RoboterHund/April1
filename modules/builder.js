@@ -1,7 +1,8 @@
 //
 'use strict';
 
-var template = require ('./template');
+var spec = require ('./spec');
+var templateNodes = require ('./template_nodes');
 
 var WritableStreamBuffer =
 	require ('stream-buffers').WritableStreamBuffer;
@@ -18,7 +19,7 @@ function TemplateBuilder (params) {
 TemplateBuilder.prototype.init = function () {
 	this.states = this.params.states;
 	this.setState (this.params.initialState);
-	this.head = new template.TemplateHead ();
+	this.head = new templateNodes.TemplateHead ();
 	this.node = this.head;
 };
 
@@ -43,6 +44,12 @@ TemplateBuilder.prototype
 		this.dispatch [node.type] (this, node.sub);
 		i++;
 	}
+};
+
+TemplateBuilder.prototype
+	.getTemplate = function () {
+
+	this.finishConstant ();
 	return this.head;
 };
 
@@ -72,7 +79,7 @@ TemplateBuilder.prototype
 		this.buffer.destroy ();
 		this.buffer = null;
 		if (string.length > 0) {
-			this.append (new template.StringNode (string));
+			this.append (new templateNodes.StringNode (string));
 		}
 	}
 };
@@ -85,15 +92,18 @@ TemplateBuilder.prototype
 
 function insert (builder, sub) {
 	builder.finishConstant ();
-	builder.append (new template.InsertNode (sub.head));
+	builder.append (
+		new templateNodes.InsertNode (
+			spec.termArg (sub, 0)));
 }
 
 function list (builder, sub) {
 	builder.finishConstant ();
-	var key = sub [0];
+	var key = spec.termArg (sub, 0);
 	var subBuilder = builder.getSubBuilder ();
-	var template = subBuilder.build (sub, 1);
-	builder.append (new template.ListNode (key, template));
+	subBuilder.build (sub, 1);
+	var template = subBuilder.getTemplate ();
+	builder.append (new templateNodes.ListNode (key, template));
 }
 
 function macro (builder, sub) {
