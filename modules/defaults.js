@@ -3,7 +3,12 @@
 
 var Parameterizer = require ('./params').Parameterizer;
 
-// empty string
+/**
+ * placeholder:
+ *  empty string
+ * @returns {Parameterizer} get() returns empty string,
+ *  regardless of key
+ */
 function emptyString () {
 	var params = new Parameterizer (null, null);
 	params.get = function (ignore) {
@@ -12,7 +17,11 @@ function emptyString () {
 	return params;
 }
 
-// fail spectacularly
+/**
+ * placeholder:
+ *  missing param error
+ * @returns {Parameterizer} get() throws error
+ */
 function missingParamError () {
 	var params = new Parameterizer (null, null);
 	params.get = function (key) {
@@ -21,7 +30,11 @@ function missingParamError () {
 	return params;
 }
 
-// undefined
+/**
+ * placeholder:
+ *  undefined
+ * @returns {Parameterizer} get() always returns undefined
+ */
 function nothing () {
 	var params = new Parameterizer (null, null);
 	params.get = function (ignore) {
@@ -30,7 +43,12 @@ function nothing () {
 	return params;
 }
 
-// show key for debugging
+/**
+ * placeholder:
+ *  show key for debugging
+ * @returns {Parameterizer} get() returns a string
+ *  that shows the key
+ */
 function showKey () {
 	var params = new Parameterizer (null, null);
 	params.get = function (key) {

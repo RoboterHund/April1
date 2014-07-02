@@ -1,14 +1,36 @@
-//
+// output generator
 'use strict';
 
 var Parameterizer = require ('./params').Parameterizer;
 
+/**
+ * output generator constructor
+ * this is a mediator between:
+ *  the output consumer,
+ *  the template,
+ *  the parameterizer
+ * @param {Consumer} consumer the output strings consumer,
+ *  responsible of assembling the final result
+ * @param {TemplateHead} template linked list of template nodes
+ *  should be reusable
+ * @param {Parameterizer} [params] values used to fill the template
+ *  can also be set directly:
+ *   output.params = params;
+ * @constructor
+ */
 function Output (consumer, template, params) {
 	this.consumer = consumer;
 	this.template = template;
 	this.params = params;
 }
 
+/**
+ * generate output:
+ *  process template nodes,
+ *   including template head
+ *  does
+ * @param template
+ */
 Output.prototype.generate = function (template) {
 	var node = template || this.template;
 	while (node) {

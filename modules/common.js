@@ -42,15 +42,30 @@ var params = {
 
 // common template builder
 
+/**
+ * create template builder
+ * wrap arguments in 'macro' spec node
+ *  this is required for robustness,
+ *  so that the spec node building logic is applied
+ *  to the arguments
+ * build template
+ * @returns {TemplateHead} template head
+ */
 function template () {
 	var templateBuilder = builder.templateBuilder (params);
-	var nodes = spec.specNode (types.MACRO, arguments);
-	templateBuilder.build (nodes.sub);
+	var argsWrapper = spec.specNode (types.MACRO, arguments);
+	templateBuilder.build (argsWrapper.sub);
 	return templateBuilder.getTemplate ();
 }
 
 // common output generator
 
+/**
+ * create consumer
+ * @param template
+ * @param paramsMap
+ * @returns {*}
+ */
 function string (template, paramsMap) {
 	var writer = consumer.consumer (params.buffer);
 	var templateParams =

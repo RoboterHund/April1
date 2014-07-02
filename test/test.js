@@ -1,33 +1,39 @@
+'use strict';
+
 var A = require ('../main');
 
 var template;
 var params;
 var string;
 
+var expect;
+
 // [*blk* (*item* x,y) ... ]
+
+expect = '[*blk* (*item* 1,2) (*item* 3,4) (*blk* X,Y) (*item* 9,42) ]';
 
 var delim = A.macro ('*');
 var label = A.macro (
 	delim,
 	A.insert ('lbl'),
-	delim,
-	' '
+	delim
 );
 
 template = A.template (
 	'[',
 	label,
-	'\n',
+	' ',
 	A.list (
 		'items',
-		'\t(',
+		'(',
 		label,
+		' ',
 		A.insert ('x'),
 		',',
 		A.insert ('y'),
-		')\n'
+		') '
 	),
-	']\n'
+	']'
 );
 
 var ITEM = 'item';
@@ -58,4 +64,26 @@ params = {
 
 string = A.string (template, params);
 
+console.log (expect);
 console.log (string);
+if (expect === string) {
+	console.log ('OK');
+} else {
+	console.log ('FAIL');
+}
+
+expect =
+	'[*nope* ]';
+
+string = A.string (template, {
+	lbl: 'nope',
+	items: []
+});
+
+console.log (expect);
+console.log (string);
+if (expect === string) {
+	console.log ('OK');
+} else {
+	console.log ('FAIL');
+}

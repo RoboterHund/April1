@@ -83,6 +83,9 @@ Switched to camelCase everywhere.
 ``0.2.2``
 Currently under development: trying to make output more configurable.
 
+``0.3.1``
+Reduced main module to core functions.
+
 *RoboterHund*  
-*2014/06/08*
+*2014/07/01*
 

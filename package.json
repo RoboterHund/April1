@@ -1,6 +1,6 @@
 {
-	"name": "april1-core",
-	"version": "0.0.1",
+	"name": "april1",
+	"version": "0.3.1",
 	"description": "April1 core",
 	"repository": {
 		"type": "git",
@@ -8,6 +8,7 @@
 	},
 	"main": "./main",
 	"dependencies": {
+		"stream-buffers": "0.2.5"
 	},
 	"author": "Alexander Diaz Chub <roboterhund@gmail.com>"
 }
