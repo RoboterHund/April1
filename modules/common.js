@@ -19,7 +19,6 @@ var dispatch = {};
 
 dispatch [types.INSERT] = builder.insert;
 dispatch [types.LIST] = builder.list;
-dispatch [undefined] = builder.terminal;
 
 // common template builder states
 
