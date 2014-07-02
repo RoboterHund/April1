@@ -19,8 +19,7 @@ var dispatch = {};
 
 dispatch [types.INSERT] = builder.insert;
 dispatch [types.LIST] = builder.list;
-dispatch [types.MACRO] = builder.macro;
-dispatch [types.TERM] = builder.term;
+dispatch [undefined] = builder.terminal;
 
 // common template builder states
 
@@ -53,8 +52,8 @@ var params = {
  */
 function template () {
 	var templateBuilder = builder.templateBuilder (params);
-	var argsWrapper = spec.specNode (types.MACRO, arguments);
-	templateBuilder.build (argsWrapper.sub);
+	var argsWrapper = spec.macro.apply (null, arguments);
+	templateBuilder.build (argsWrapper, 1);
 	return templateBuilder.getTemplate ();
 }
 

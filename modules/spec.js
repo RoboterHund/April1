@@ -2,43 +2,34 @@
 'use strict';
 
 var types = require ('./types');
-var TERM = types.TERM;
 
-function SpecNode (type, sub) {
-	this.type = type;
-	this.sub = sub;
+function specNode (type) {
+	return expandSub ([type], arguments);
 }
 
-function specNode (type, args) {
-	var n = args.length;
+function expandSub (sub, args) {
 	var i;
+	var n = args.length;
 	var arg;
-	for (i = 0; i < n; i++) {
+	for (i = 1; i < n; i++) {
 		arg = args [i];
-		if (!(arg instanceof SpecNode)) {
-			args [i] = new SpecNode (TERM, arg);
+		if (arg [0] === types.MACRO) {
+			expandSub (sub, arg);
+		} else {
+			sub.push (arg);
 		}
 	}
-
-	return new SpecNode (type, args);
+	return sub;
 }
 
-function nodeBuilder () {
-	return specNode (this, arguments);
+function nodeBuilder (type) {
+	return specNode.bind (null, type);
 }
 
-function createNodeBuilder (type) {
-	return nodeBuilder.bind (type);
-}
-
-function termArg (sub, index) {
-	return sub [index].sub;
-}
+var macro = nodeBuilder (types.MACRO);
 
 module.exports = {
-	createNodeBuilder: createNodeBuilder,
+	macro: macro,
 	nodeBuilder: nodeBuilder,
-	SpecNode: SpecNode,
-	specNode: specNode,
-	termArg: termArg
+	specNode: specNode
 };

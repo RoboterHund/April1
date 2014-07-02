@@ -1,7 +1,6 @@
 // template builder
 'use strict';
 
-var spec = require ('./spec');
 var templateNodes = require ('./template_nodes');
 
 var WritableStreamBuffer =
@@ -92,7 +91,12 @@ TemplateBuilder.prototype
 	var node;
 	for (; i < end; i++) {
 		node = nodes [i];
-		this.dispatch [node.type] (this, node.sub);
+		var nodeBuilder = this.dispatch [node [0]];
+		if (nodeBuilder) {
+			nodeBuilder (this, node);
+		} else {
+			constant (this, node);
+		}
 	}
 };
 
@@ -179,11 +183,10 @@ TemplateBuilder.prototype
  *   'term' spec node that will be set as the key of
  *    the 'insert' template node
  */
-function insert (builder, sub) {
+function insert (builder, node) {
 	builder.finishPending ();
 	builder.append (
-		new templateNodes.InsertNode (
-			spec.termArg (sub, 0)));
+		new templateNodes.InsertNode (node [1]));
 }
 
 /**
@@ -194,37 +197,24 @@ function insert (builder, sub) {
  *   'term' spec node with key that will be used to search for list items
  *   the spec nodes of the template used to render the list items
  */
-function list (builder, sub) {
+function list (builder, node) {
 	builder.finishPending ();
-	var key = spec.termArg (sub, 0);
+	var key = node [1];
 	var subBuilder = builder.getSubBuilder ();
-	subBuilder.build (sub, 1);
+	subBuilder.build (node, 2);
 	var template = subBuilder.getTemplate ();
 	builder.append (new templateNodes.ListNode (key, template));
 }
 
 /**
- * process items of 'macro' spec node
- * note:
- *  all dispatchers must include this function
- *  otherwise the semantics of
- *  the 'macro' spec node will be broken
- * @param builder template builder
- * @param sub node items array-like object
- */
-function macro (builder, sub) {
-	builder.build (sub);
-}
-
-/**
- * process 'term' spec node
+ * process terminal spec node
  * @param builder template builder
  * @param sub node items array-like object
  *  should contain 1 item:
  *   the string to append to template
  */
-function term (builder, sub) {
-	builder.appendConstant (sub);
+function constant (builder, node) {
+	builder.appendConstant (node);
 }
 
 module.exports = {
@@ -232,6 +222,5 @@ module.exports = {
 	templateBuilder: templateBuilder,
 	insert: insert,
 	list: list,
-	macro: macro,
-	term: term
+	constant: constant
 };

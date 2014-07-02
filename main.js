@@ -27,9 +27,9 @@ module.exports = {
 	// external interface
 
 	// spec node builders
-	insert: spec.createNodeBuilder (types.INSERT),
-	list: spec.createNodeBuilder (types.LIST),
-	macro: spec.createNodeBuilder (types.MACRO),
+	insert: spec.nodeBuilder (types.INSERT),
+	list: spec.nodeBuilder (types.LIST),
+	macro: spec.nodeBuilder (types.MACRO),
 
 	// operation functions
 	params: params.params,
