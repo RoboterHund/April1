@@ -10,7 +10,8 @@ var expect;
 
 // [*blk* (*item* x,y) ... ]
 
-expect = '[*blk* (*item* 1,2) (*item* 3,4) (*blk* X,Y) (*item* 9,42) ]';
+expect =
+	'[*blk* (*item* 1,2) (*item* 3,4) (*blk* X,Y) (*item* 9,42) ] end';
 
 var delim = A.macro ('*');
 var label = A.macro (
@@ -18,22 +19,27 @@ var label = A.macro (
 	A.insert ('lbl'),
 	delim
 );
+var listStart = A.macro (
+	'items',
+	'('
+);
+var insertY = A.insert ('y');
 
 template = A.template (
 	'[',
 	label,
 	' ',
 	A.list (
-		'items',
-		'(',
+		listStart,
 		label,
 		' ',
 		A.insert ('x'),
 		',',
-		A.insert ('y'),
+		insertY,
 		') '
 	),
-	']'
+	'] ',
+	insertY
 );
 
 var ITEM = 'item';
@@ -59,7 +65,8 @@ params = {
 			x: 9,
 			y: 42
 		}
-	]
+	],
+	y: 'end'
 };
 
 string = A.string (template, params);
@@ -73,11 +80,12 @@ if (expect === string) {
 }
 
 expect =
-	'[*nope* ]';
+	'[*nope* ] 0';
 
 string = A.string (template, {
 	lbl: 'nope',
-	items: []
+	items: [],
+	y: 0
 });
 
 console.log (expect);

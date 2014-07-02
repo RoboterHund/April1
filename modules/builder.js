@@ -95,7 +95,7 @@ TemplateBuilder.prototype
 		if (nodeBuilder) {
 			nodeBuilder (this, node);
 		} else {
-			constant (this, node);
+			this.dispatch [undefined] (this, node);
 		}
 	}
 };
@@ -213,7 +213,7 @@ function list (builder, node) {
  *  should contain 1 item:
  *   the string to append to template
  */
-function constant (builder, node) {
+function terminal (builder, node) {
 	builder.appendConstant (node);
 }
 
@@ -222,5 +222,5 @@ module.exports = {
 	templateBuilder: templateBuilder,
 	insert: insert,
 	list: list,
-	constant: constant
+	terminal: terminal
 };
