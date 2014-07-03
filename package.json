@@ -1,7 +1,7 @@
 {
 	"name": "april1",
 	"version": "0.3.1",
-	"description": "April1 core",
+	"description": "April1 templates engine core",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/RoboterHund/April1.git"
