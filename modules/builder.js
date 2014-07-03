@@ -13,16 +13,20 @@ var WritableStreamBuffer =
  * the template builder itself only contains the logic to:
  *  accumulate constant strings (the fixed parts of the template)
  *  append template nodes
- *  create builders for sub-templatest
+ *  create sub-template builders
  *  switch from one state to another
  *  dispatch spec node types to the builder function that corresponds
  *   to the current state of the builder
  * the actual logic of constructing the template nodes
  *  is defined by the dispatchers
+ * note:
+ *  template builders should never modify:
+ *   any spec node
+ *   the state set or any of its dispatchers
  * @param params template builder parameters:
  *  states : map of state to dispatcher
  *  initialState : initial state
- *  buffer: buffer params
+ *  buffer: buffer params (see stream-buffers package)
  * @constructor
  */
 function TemplateBuilder (params) {
@@ -36,7 +40,6 @@ function TemplateBuilder (params) {
 
 /**
  * initialize template builder
- * must be called before building
  * set initial state & initial dispatcher
  * create template head
  */
@@ -49,7 +52,6 @@ TemplateBuilder.prototype.init = function () {
 
 /**
  * template builder constructor wrapper
- * initialize builder
  * @param params passed to constructor
  * @returns {TemplateBuilder} initialized builder
  */
@@ -68,25 +70,21 @@ TemplateBuilder.prototype.setState = function (state) {
 };
 
 /**
- * build nodes in array-like object
- * @param nodes array-like object of spec nodes
- *  note:
- *   there is no requirement that it is actually an array
- *    the only requirement is that there is an order,
- *    specified by 0-based indices,
- *    and a length property that indicates the number of nodes
- *   the items must be spec nodes, otherwise the dispatcher
- *    will fail to find the function that will be used
- *    to process the spec node
+ * build nodes in array
+ * dispatch each node to the function that corresponds to the node type
+ * if such function is not found, dispatch to the default function
+ * @param nodes array of spec nodes
  * @param [from] do not process nodes before this index
- *  default: 0
+ *  default: 1
+ *   because 0 is the node type,
+ *    which must be handled outside
  * @param [to] do not process nodes at this index and beyond
  *  default: nodes.length
  */
 TemplateBuilder.prototype
 	.build = function (nodes, from, to) {
 
-	var i = from || 0;
+	var i = from || 1;
 	var end = to || nodes.length;
 	var node;
 	for (; i < end; i++) {
@@ -147,7 +145,7 @@ TemplateBuilder.prototype
  * note:
  *  implementations of template builder must call this before:
  *   appending any template node
- *  must be called before retrieving the
+ *   retrieving the final result
  */
 TemplateBuilder.prototype
 	.finishPending = function () {
@@ -175,13 +173,12 @@ TemplateBuilder.prototype
 };
 
 /**
- * process items of 'insert' spec node
- *  the 'insert' template node
+ * process 'insert' spec node
+ * append 'insert' template node
  * @param builder template builder
- * @param sub node items array-like object
+ * @param node the spec node
  *  should contain 1 item:
- *   'term' spec node that will be set as the key of
- *    the 'insert' template node
+ *   the key of the 'insert' template node
  */
 function insert (builder, node) {
 	builder.finishPending ();
@@ -190,11 +187,12 @@ function insert (builder, node) {
 }
 
 /**
- * process items of 'list' spec node
+ * process 'list' spec node
+ * append 'list' template node
  * @param builder template builder
- * @param sub node items array-like object
+ * @param node the spec node
  *  should contain at least 2 items:
- *   'term' spec node with key that will be used to search for list items
+ *   key of the list items
  *   the spec nodes of the template used to render the list items
  */
 function list (builder, node) {
@@ -208,10 +206,10 @@ function list (builder, node) {
 
 /**
  * process terminal spec node
+ * interpret node as string,
+ *  append it to template
  * @param builder template builder
- * @param sub node items array-like object
- *  should contain 1 item:
- *   the string to append to template
+ * @param node the item to append
  */
 function terminal (builder, node) {
 	builder.appendConstant (node);

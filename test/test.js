@@ -1,3 +1,5 @@
+// a rather complicated test script,
+// designed for good test coverage
 'use strict';
 
 var A = require ('../main');
@@ -8,8 +10,8 @@ var string;
 
 var expect;
 
-// [*blk* (*item* x,y) ... ]
-
+// test 1
+// expected output:
 expect =
 	'[*blk* (*item* 1,2) (*item* 3,4) (*blk* X,Y) (*item* 9,42) ] end';
 
@@ -79,13 +81,22 @@ if (expect === string) {
 	console.log ('FAIL');
 }
 
+// test 2
+// same template as test 1
+// expected output:
 expect =
-	'[*nope* ] 0';
+	'[*nope* ] end: ok';
+
+var endTemplate = A.template (
+	'end: ',
+	A.insert ('end')
+);
 
 string = A.string (template, {
+	end: 'ok',
 	lbl: 'nope',
 	items: [],
-	y: 0
+	y: endTemplate
 });
 
 console.log (expect);

@@ -1,4 +1,4 @@
-//
+// common reusable functions, constants, etc.
 'use strict';
 
 var builder = require ('./builder');
@@ -53,7 +53,7 @@ var params = {
 function template () {
 	var templateBuilder = builder.templateBuilder (params);
 	var argsWrapper = spec.macro.apply (null, arguments);
-	templateBuilder.build (argsWrapper, 1);
+	templateBuilder.build (argsWrapper);
 	return templateBuilder.getTemplate ();
 }
 
@@ -61,9 +61,14 @@ function template () {
 
 /**
  * create consumer
- * @param template
- * @param paramsMap
- * @returns {*}
+ * create parameterizer
+ *  it will throw error if a key is not found
+ * create output generator
+ * generate string with given template and parameters
+ * @param template template nodes list
+ * @param paramsMap object mapping keys to values
+ * @returns {string} the result of combining the template
+ *  with the given parameters
  */
 function string (template, paramsMap) {
 	var writer = consumer.consumer (params.buffer);
@@ -79,8 +84,8 @@ function string (template, paramsMap) {
 module.exports = {
 	BUILD: BUILD,
 	dispatch: dispatch,
-	params: params,
 	states: states,
-	string: string,
-	template: template
+	params: params,
+	template: template,
+	string: string
 };

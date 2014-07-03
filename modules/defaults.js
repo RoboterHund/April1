@@ -47,7 +47,7 @@ function nothing () {
  * placeholder:
  *  show key for debugging
  * @returns {Parameterizer} get() returns a string
- *  that shows the key
+ *  that contains the key
  */
 function showKey () {
 	var params = new Parameterizer (null, null);
