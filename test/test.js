@@ -4,7 +4,6 @@
 
 var A = require ('../main');
 
-var template;
 var params;
 var string;
 
@@ -34,8 +33,8 @@ var values = {
 	]
 };
 
-var expect = 'Hello, World. 1. 2. 3.';
-var string =
+expect = 'Hello, World. 1. 2. 3.';
+string =
 	A.string (template, values);
 
 console.log (expect);
