@@ -10,6 +10,42 @@ var string;
 
 var expect;
 
+// test 0
+// the test in README
+
+var template = A.template (
+	'Hello, ',
+	A.insert ('who'),
+	'.',
+	A.list (
+		'then',
+		' ',
+		A.insert ('item'),
+		'.'
+	)
+);
+
+var values = {
+	who: 'World',
+	then: [
+		{ item: 1 },
+		{ item: 2 },
+		{ item: 3 }
+	]
+};
+
+var expect = 'Hello, World. 1. 2. 3.';
+var string =
+	A.string (template, values);
+
+console.log (expect);
+console.log (string);
+if (expect === string) {
+	console.log ('OK');
+} else {
+	console.log ('FAIL');
+}
+
 // test 1
 // expected output:
 expect =

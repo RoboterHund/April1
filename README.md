@@ -2,43 +2,61 @@ April1
 ======
 &copy; 2014 RoboterHund
 
-_Note_: experimental module, everything is subject to change.
+_Note_:
+
+1. Still in early development stage. Things may change.
+2. XML and HTML output was removed in
+0.3.1 – will be moved to separate package.
 
 * * *
 
-**April1** is an *anti-template engine* for the Node.js platform.
+**April1** is a general-purpose, extensible template engine for the Node.js platform.
 
-This means that it aims to provide the same functionality as a typical
-template engine, except that the template is defined directly in code.
+Main characteristics:
 
-Example:
+- **Not coupled to any syntax**.
+Templates are defined in plain JS.
+	The extremely simple data structures can be (de)serialized by other packages.
+- **Separate components**.
+Designed for easy overriding
+without breaking other parts,
+thanks to a well-defined set of constraints.
+
+This is the core module.
+It provides basic functionality for more specialized modules.
+
+Simple example:
 
 	var A = require ('april1');
-	var myTemplate = A.template (
-		A.body (
-			A.img (
-				A.src (A.include ('URL'))
-			),
-			A.p (
-				A.id (A.include ('ID')),
-				A.include ('TEXT')
-			)
+	var template = A.template (
+		'Hello, ',
+		A.insert ('who'),
+		'.',
+		A.list (
+			'then',
+			' ',
+			A.insert ('item'),
+			'.'
 		)
 	);
 
 The above code creates a reusable template.
 
-Values are supplied by a *parameterizer*. Example:
+Values are supplied afterwards:
 
-    var myParams = A.params (A.placeholders.emptyString)
-        .set ('URL', '/img/picture.png')
-        .set ('ID', 'cont_42')
-        .set ('TEXT', 'hello world');
+	var values = {
+		who: 'World',
+		then: [
+			{ item: 1 },
+			{ item: 2 },
+			{ item: 3 }
+		]
+	};
 
-Now, the function call ``A.string (myParams, myTemplate)``
+Now, the function call ``A.string (template, values)``
 would *by default* return this string:
 
-	<body><img src="/img/picture.png"/><p id="cont_42">hello world</p></body>
+	Hello, World. 1. 2. 3.
 
 ***By default***.
 
@@ -46,46 +64,22 @@ would *by default* return this string:
 
 unit tests
 ----------
-The ``js-test`` folder contains some fixtures for the ``nunitjs`` unit test framework.
+The ``test`` folder contains a test script. It is rudimentary, but has good coverage.
 
 * * *
 
 versions
 --------
 
-``0.0.1``
-Initial version, published on 2014/04/01
-
-``0.1.1``
-Attempt to simplify node module export interface.
-
-Restructured components with the aim of simplifying static analysis:
-IDEs like IntelliJ should autocomplete and find the declaration
-of all exported April1 functions and objects.
-
-``0.1.2``
-New functions:
-
-* ``group`` allows to define subsequences of a template or templates
-that are identical or similar to each other.
-
-* ``list`` binds a subtemplate to an array of objects.
-
-    Test module ``htmlTemplatesFixture`` demonstrates this.
-
-* * *
-
-``0.2.1``
-Switched to camelCase everywhere.
-
-`to_template` and `to_string` renamed to `aTemp` and `aStr`.
-
 ``0.2.2``
-Currently under development: trying to make output more configurable.
+This is the last version to include support for XML and HTML generation.
 
 ``0.3.1``
-Reduced main module to core functions.
+
+- Reduced main module to core functions.
+- Complete redesign.
+More flexibility, more exported functions, simpler components.
 
 *RoboterHund*  
-*2014/07/01*
+*2014/07/03*
 

@@ -1,4 +1,8 @@
 // common reusable functions, constants, etc.
+//
+// this module contains reusable code that is not considered
+//  generic enough to include directly in any of the other modules
+
 'use strict';
 
 var builder = require ('./builder');
