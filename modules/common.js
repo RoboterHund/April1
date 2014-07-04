@@ -13,37 +13,58 @@ var parameterizer = require ('./params');
 var spec = require ('./spec');
 var types = require ('./types');
 
-// common build state
-
+/**
+ * common build state
+ * @type {string}
+ */
 var BUILD = 'build';
 
-// common dispatcher
+/**
+ * common dispatcher
+ * @returns {{}} map of node types to builder functions
+ */
+function builderDispatcher () {
+	var dispatch = {};
 
-var dispatch = {};
+	dispatch [types.INSERT] = builder.insert;
+	dispatch [types.LIST] = builder.list;
+	dispatch [undefined] = builder.terminal;
 
-dispatch [types.INSERT] = builder.insert;
-dispatch [types.LIST] = builder.list;
-dispatch [undefined] = builder.terminal;
+	return dispatch;
+}
 
-// common template builder states
+var dispatch = builderDispatcher ();
 
-var states = {};
+/**
+ * common template builder states
+ * @returns {{}} map of state names to dispatchers
+ */
+function builderStates () {
+	var states = {};
 
-states [BUILD] = dispatch;
+	states [BUILD] = dispatch;
 
-// common template builder params
+	return states;
+}
 
-var params = {
-	buffer: {
-		encoding: 'utf-8',
-		initialSize: 0,
-		incrementAmount: 0
-	},
-	initialState: BUILD,
-	states: states
-};
+var states = builderStates ();
 
-// common template builder
+/**
+ * common template builder params
+ * @returns {{}} params for TemplateBuilder
+ */
+function builderParams () {
+	return {
+		buffer: {
+			encoding: 'utf-8',
+			initialSize: 0,
+			incrementAmount: 0
+		},
+		initialState: BUILD,
+		states: states
+	};
+}
+var params = builderParams ();
 
 /**
  * create template builder
@@ -54,14 +75,12 @@ var params = {
  * build template
  * @returns {TemplateHead} template head
  */
-function template () {
-	var templateBuilder = builder.templateBuilder (params);
+function buildTemplate () {
+	var templateBuilder = builder.templateBuilder (this.params);
 	var argsWrapper = spec.macro.apply (null, arguments);
 	templateBuilder.build (argsWrapper);
 	return templateBuilder.getTemplate ();
 }
-
-// common output generator
 
 /**
  * create consumer
@@ -74,8 +93,8 @@ function template () {
  * @returns {string} the result of combining the template
  *  with the given parameters
  */
-function string (template, paramsMap) {
-	var writer = consumer.consumer (params.buffer);
+function outputString (template, paramsMap) {
+	var writer = consumer.consumer (this.params.buffer);
 	var templateParams =
 		parameterizer.params (
 			paramsMap, defaults.missingParamError ());
@@ -87,9 +106,18 @@ function string (template, paramsMap) {
 
 module.exports = {
 	BUILD: BUILD,
+
+	builderDispatcher: builderDispatcher,
+	builderStates: builderStates,
+	builderParams: builderParams,
+
 	dispatch: dispatch,
 	states: states,
 	params: params,
-	template: template,
-	string: string
+
+	buildTemplate: buildTemplate,
+	outputString: outputString,
+
+	template: buildTemplate.bind ({params: params}),
+	string: outputString.bind ({params: params})
 };
