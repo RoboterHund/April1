@@ -81,8 +81,9 @@ This is the last version to include support for XML and HTML generation.
 - Complete redesign.
 More flexibility, more exported functions, simpler components.
 
-``0.3.2``
+``0.3.2 - 0.3.3``
 Redesign of `common` module, to facilitate extension.
+README update with link to april1-html.
 
 *RoboterHund*  
 *2014/07/06*
