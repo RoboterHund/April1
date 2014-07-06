@@ -6,7 +6,8 @@ _Note_:
 
 1. Still in early development stage. Things may change.
 2. XML and HTML output was removed in
-0.3.1 – will be moved to separate package.
+0.3.1 – moved to [april1-html](https://www.npmjs.org/package/april1-html).
+
 
 * * *
 
@@ -84,5 +85,5 @@ More flexibility, more exported functions, simpler components.
 Redesign of `common` module, to facilitate extension.
 
 *RoboterHund*  
-*2014/07/03*
+*2014/07/06*
 
