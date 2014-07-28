@@ -1,26 +1,7 @@
 // template nodes
 'use strict';
 
-/**
- * template head
- * all template nodes have the same interface:
- *  next: the next node in the template nodes linked list
- *  out: function that takes an output generator as argument
- *   and writes the output to it
- * note:
- *  the list of template nodes must be immutable,
- *   so that it can always be reused
- *  the state of the final result generation must
- *   be stored in the output generator
- * @constructor
- */
-function TemplateHead () {
-	this.next = null;
-
-	this.out = function () {
-		return this.next;
-	};
-}
+var types = require ('./types');
 
 /**
  * string node
@@ -28,11 +9,8 @@ function TemplateHead () {
  * @constructor
  */
 function StringNode (string) {
-	this.next = null;
-
 	this.out = function (output) {
 		output.write (this.string);
-		return this.next;
 	};
 
 	this.string = string;
@@ -47,18 +25,14 @@ function StringNode (string) {
  * @constructor
  */
 function InsertNode (key) {
-	this.next = null;
-
 	this.out = function (output) {
 		var value = output.param (this.key);
 
-		if (value.out) {
+		if (value.length && value [0] === types.TEMPLATE) {
 			output.generate (value);
 		} else {
 			output.write (value);
 		}
-
-		return this.next;
 	};
 
 	this.key = key;
@@ -74,8 +48,6 @@ function InsertNode (key) {
  * @constructor
  */
 function ListNode (key, template) {
-	this.next = null;
-
 	this.out = function (output) {
 		var items = output.param (this.key);
 		var i;
@@ -87,8 +59,6 @@ function ListNode (key, template) {
 			output.generate (this.template);
 		}
 		output.popParams ();
-
-		return this.next;
 	};
 
 	this.key = key;
@@ -96,7 +66,6 @@ function ListNode (key, template) {
 }
 
 module.exports = {
-	TemplateHead: TemplateHead,
 	StringNode: StringNode,
 	InsertNode: InsertNode,
 	ListNode: ListNode

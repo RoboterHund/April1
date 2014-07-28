@@ -2,6 +2,8 @@
 'use strict';
 
 var templateNodes = require ('./template_nodes');
+var types = require ('./types');
+
 
 var WritableStreamBuffer =
 	require ('stream-buffers').WritableStreamBuffer;
@@ -9,7 +11,7 @@ var WritableStreamBuffer =
 /**
  * template builder constructor
  * this converts a tree of spec nodes
- *  into a linked list of template nodes
+ *  into a template node
  * the template builder itself only contains the logic to:
  *  accumulate constant strings (the fixed parts of the template)
  *  append template nodes
@@ -26,9 +28,8 @@ var WritableStreamBuffer =
  */
 function TemplateBuilder (params) {
 	this.params = params;
+	this.template = null;
 	this.dispatch = null;
-	this.head = null;
-	this.node = null;
 	this.buffer = null;
 }
 
@@ -39,8 +40,7 @@ function TemplateBuilder (params) {
  */
 TemplateBuilder.prototype.init = function () {
 	this.dispatch = this.params.dispatch;
-	this.head = new templateNodes.TemplateHead ();
-	this.node = this.head;
+	this.template = [types.TEMPLATE];
 };
 
 /**
@@ -86,13 +86,13 @@ TemplateBuilder.prototype
 /**
  * finish any pending actions required to build template
  * return the resulting template
- * @returns {TemplateHead} template head
+ * @returns {Array} template
  */
 TemplateBuilder.prototype
 	.getTemplate = function () {
 
 	this.finishPending ();
-	return this.head;
+	return this.template;
 };
 
 /**
@@ -102,8 +102,7 @@ TemplateBuilder.prototype
 TemplateBuilder.prototype
 	.append = function (node) {
 
-	this.node.next = node;
-	this.node = node;
+	this.template.push (node);
 };
 
 /**

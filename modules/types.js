@@ -4,5 +4,6 @@
 module.exports = {
 	INSERT: 'insert',
 	LIST: 'list',
-	MACRO: 'macro'
+	MACRO: 'macro',
+	TEMPLATE: 'template'
 };

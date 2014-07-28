@@ -58,7 +58,7 @@ var params = builderParams ();
  *  so that the spec node building logic is applied
  *  to the arguments
  * build template
- * @returns {TemplateHead} template head
+ * @returns {Array} template head
  */
 function buildTemplate () {
 	var templateBuilder = builder.templateBuilder (this.params);

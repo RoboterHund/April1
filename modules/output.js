@@ -11,7 +11,7 @@ var Parameterizer = require ('./params').Parameterizer;
  *  the parameterizer
  * @param {Consumer} consumer the output strings consumer,
  *  responsible of assembling the final result
- * @param {TemplateHead} template linked list of template nodes
+ * @param {Array} template template nodes
  *  should be reusable
  * @param {Parameterizer} [params] values used to fill the template
  *  can also be set directly:
@@ -27,7 +27,7 @@ function Output (consumer, template, params) {
 /**
  * output generator constructor wrapper
  * @param {Consumer} consumer passed to constructor
- * @param {TemplateHead} template passed to constructor
+ * @param {Array} template passed to constructor
  * @param {Parameterizer} [params] passed to constructor
  * @returns {Output} initialized output generator
  */
@@ -48,9 +48,11 @@ function output (consumer, template, params) {
  *  attached to this object
  */
 Output.prototype.generate = function (template) {
-	var node = template || this.template;
-	while (node) {
-		node = node.out (this);
+	var nodes = template || this.template;
+	var i;
+	var n = nodes.length;
+	for (i = 1; i < n; i++) {
+		nodes [i].out (this);
 	}
 };
 
