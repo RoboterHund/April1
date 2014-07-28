@@ -36,20 +36,6 @@ function builderDispatcher () {
 var dispatch = builderDispatcher ();
 
 /**
- * common template builder states
- * @returns {{}} map of state names to dispatchers
- */
-function builderStates () {
-	var states = {};
-
-	states [BUILD] = dispatch;
-
-	return states;
-}
-
-var states = builderStates ();
-
-/**
  * common template builder params
  * @returns {{}} params for TemplateBuilder
  */
@@ -60,8 +46,7 @@ function builderParams () {
 			initialSize: 0,
 			incrementAmount: 0
 		},
-		initialState: BUILD,
-		states: states
+		dispatch: dispatch
 	};
 }
 var params = builderParams ();
@@ -108,11 +93,9 @@ module.exports = {
 	BUILD: BUILD,
 
 	builderDispatcher: builderDispatcher,
-	builderStates: builderStates,
 	builderParams: builderParams,
 
 	dispatch: dispatch,
-	states: states,
 	params: params,
 
 	buildTemplate: buildTemplate,

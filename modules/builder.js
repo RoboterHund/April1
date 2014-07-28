@@ -14,24 +14,18 @@ var WritableStreamBuffer =
  *  accumulate constant strings (the fixed parts of the template)
  *  append template nodes
  *  create sub-template builders
- *  switch from one state to another
- *  dispatch spec node types to the builder function that corresponds
- *   to the current state of the builder
+ *  dispatch spec node types to the builder function
  * the actual logic of constructing the template nodes
  *  is defined by the dispatchers
  * note:
- *  template builders should never modify:
- *   any spec node
- *   the state set or any of its dispatchers
+ *  template builders should never modify any spec node
  * @param params template builder parameters:
- *  states : map of state to dispatcher
- *  initialState : initial state
+ *  dispatch : dispatcher
  *  buffer: buffer params (see stream-buffers package)
  * @constructor
  */
 function TemplateBuilder (params) {
 	this.params = params;
-	this.states = null;
 	this.dispatch = null;
 	this.head = null;
 	this.node = null;
@@ -40,12 +34,11 @@ function TemplateBuilder (params) {
 
 /**
  * initialize template builder
- * set initial state & initial dispatcher
+ * set dispatcher
  * create template head
  */
 TemplateBuilder.prototype.init = function () {
-	this.states = this.params.states;
-	this.setState (this.params.initialState);
+	this.dispatch = this.params.dispatch;
 	this.head = new templateNodes.TemplateHead ();
 	this.node = this.head;
 };
@@ -60,14 +53,6 @@ function templateBuilder (params) {
 	builder.init ();
 	return builder;
 }
-
-/**
- * set dispatcher corresponding to new state
- * @param state new state, must be a key in params.states
- */
-TemplateBuilder.prototype.setState = function (state) {
-	this.dispatch = this.states [state];
-};
 
 /**
  * build nodes in array
