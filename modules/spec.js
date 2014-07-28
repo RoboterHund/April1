@@ -43,14 +43,12 @@ function expandSub (sub, args) {
 /**
  * create node builder
  * @param type the type of spec nodes to generate
- * @returns {Function} a function that will return
+ * @returns {function(this:null)} a function that will return
  *  a spec node of the specified type,
- *  and with the items provided to the function as argument
+ *  and with the items provided the function as argument
  */
 function nodeBuilder (type) {
-	return function buildNode () {
-		return expandSub ([type], arguments);
-	};
+	return specNode.bind (null, type);
 }
 
 /**
