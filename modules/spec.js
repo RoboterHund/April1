@@ -57,8 +57,19 @@ function nodeBuilder (type) {
  */
 var macro = nodeBuilder (types.MACRO);
 
+/**
+ *
+ * @param node
+ * @param type
+ * @returns {boolean}
+ */
+function isNodeType (node, type) {
+	return node instanceof Array && node [0] === type;
+}
+
 module.exports = {
 	specNode: specNode,
 	nodeBuilder: nodeBuilder,
-	macro: macro
+	macro: macro,
+	isNodeType: isNodeType
 };
