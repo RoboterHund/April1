@@ -1,64 +1,82 @@
-// specification nodes
+// spec nodes
 'use strict';
 
 var types = require ('./types');
 
+var Type = types.Type;
+
 /**
- * build spec node
- * expand macros
- *  except when the returned node is itself a macro
- * @param type the type of the returned spec node
- *  all other arguments are added as node items
- *  macros are expanded
- * @returns {Array} the spec node, where the first element
- *  is the type
+ *
+ * @param {Type} type
+ * @param {Array} args
+ * @returns {Array}
  */
-function specNode (type) {
-	return expandSub ([type], arguments);
+function specNode (type, args) {
+	return expand ([type], args, 0);
 }
 
 /**
  * push node items onto the spec node array
  * expand macros
- * @param {Array} sub the spec node array to be generated
+ * @param {Array} node the spec node array to be generated
  * @param args node items
+ * @param i
  * @returns {Array} the spec node array,
  *  with the items appended
  */
-function expandSub (sub, args) {
-	var i;
+function expand (node, args, i) {
 	var n = args.length;
 	var arg;
-	for (i = 1; i < n; i++) {
+	for (; i < n; i++) {
 		arg = args [i];
-		if (arg [0] === types.MACRO) {
-			expandSub (sub, arg);
+		if (isNodeType (arg, types.MACRO)) {
+			expand (node, arg, 1);
+
 		} else {
-			sub.push (arg);
+			node.push (arg);
 		}
 	}
-	return sub;
+	return node;
 }
 
 /**
  * create node builder
- * @param type the type of spec nodes to generate
- * @returns {function(this:null)} a function that will return
- *  a spec node of the specified type,
- *  and with the items provided the function as argument
+ * @param type spec node type
+ * @returns {Function} function that returns
+ *  spec nodes of specified type
  */
 function nodeBuilder (type) {
-	return specNode.bind (null, type);
+	return function () {
+		return specNode (type, arguments);
+	};
 }
 
 /**
  * macro node builder
- * @type {function(this:null)}
+ * @type {Function}
  */
 var macro = nodeBuilder (types.MACRO);
+
+/**
+ *
+ * @param node
+ * @param {Type} type
+ * @returns {boolean}
+ */
+function isNodeType (node, type) {
+	if (node) {
+		var nType = node [0];
+		return nType instanceof Type
+			&& nType.id == type.id;
+
+	} else {
+		return false;
+	}
+}
 
 module.exports = {
 	specNode: specNode,
 	nodeBuilder: nodeBuilder,
-	macro: macro
+	macro: macro,
+	isNodeType: isNodeType
 };

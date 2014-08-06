@@ -2,39 +2,48 @@
 // main module
 'use strict';
 
-var builder = require ('./modules/builder');
-var common = require ('./modules/common');
+var tempBuild = require ('./modules/templates/build');
+var tempOutput = require ('./modules/templates/output');
+var tempSpec = require ('./modules/templates/spec');
+
 var consumer = require ('./modules/consumer');
 var defaults = require ('./modules/defaults');
+var dispatch = require ('./modules/dispatch');
 var output = require ('./modules/output');
 var params = require ('./modules/params');
 var spec = require ('./modules/spec');
-var templateNodes = require ('./modules/template_nodes');
+var template = require ('./modules/template');
 var types = require ('./modules/types');
 
 module.exports = {
 
 	// modules
-	builder: builder,
-	common: common,
-	consumer: consumer,
-	defaults: defaults,
-	output: output,
-	parameterizer: params,
-	spec: spec,
-	templateNodes: templateNodes,
-	types: types,
+	modules: {
+		templates: {
+			build: tempBuild,
+			output: tempOutput,
+			spec: tempSpec
+		},
+		consumer: consumer,
+		defaults: defaults,
+		dispatch: dispatch,
+		output: output,
+		parameterizer: params,
+		spec: spec,
+		template: template,
+		types: types
+	},
 
 	// external interface
 
 	// spec node builders
-	insert: spec.nodeBuilder (types.INSERT),
-	list: spec.nodeBuilder (types.LIST),
-	macro: spec.nodeBuilder (types.MACRO),
+	insert: tempSpec.insertNode,
+	list: tempSpec.listNode,
+	macro: spec.macro,
 
 	// operation functions
 	params: params.params,
-	string: common.string,
-	template: common.template
+	string: template.doBuildString,
+	template: template.doBuildTemplate
 
 };
