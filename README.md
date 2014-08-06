@@ -85,6 +85,11 @@ More flexibility, more exported functions, simpler components.
 Redesign of `common` module, to facilitate extension.
 README update with link to april1-html.
 
+``0.4.1``
+Templates are also nodes.
+Less classes.
+Removed the concept of 'template builder state'.
+
 *RoboterHund*  
 *2014/07/06*
 

@@ -48,7 +48,7 @@ if (expect === string) {
 // test 1
 // expected output:
 expect =
-	'[*blk* (*item* 1,2) (*item* 3,4) (*blk* X,Y) (*item* 9,42) ] end';
+	'[*blk* (*item* 1,2) (*item* 3,4) (*blk* X,Y) (*item* 9,42)] end';
 
 var delim = A.macro ('*');
 var label = A.macro (
@@ -58,14 +58,13 @@ var label = A.macro (
 );
 var listStart = A.macro (
 	'items',
-	'('
+	' ('
 );
 var insertY = A.insert ('y');
 
 template = A.template (
 	'[',
 	label,
-	' ',
 	A.list (
 		listStart,
 		label,
@@ -73,7 +72,7 @@ template = A.template (
 		A.insert ('x'),
 		',',
 		insertY,
-		') '
+		')'
 	),
 	'] ',
 	insertY
@@ -120,7 +119,7 @@ if (expect === string) {
 // same template as test 1
 // expected output:
 expect =
-	'[*nope* ] end: ok';
+	'[*nope*] end: ok';
 
 var endTemplate = A.template (
 	'end: ',
@@ -131,6 +130,34 @@ string = A.string (template, {
 	end: 'ok',
 	lbl: 'nope',
 	items: [],
+	y: endTemplate
+});
+
+console.log (expect);
+console.log (string);
+if (expect === string) {
+	console.log ('OK');
+} else {
+	console.log ('FAIL');
+}
+
+// test 3
+// same template as test 1
+// expected output:
+expect =
+	'[*nope* (*nope* {$x},42)] end: {$end}';
+
+var stringParams = A.modules.template.defaultStringParams ();
+stringParams.getDefault = A.modules.defaults.showKey ();
+var stringShowKey = A.modules.template.buildString (stringParams);
+
+string = stringShowKey (template, {
+	lbl: 'nope',
+	items: [
+		{
+			y: '42'
+		}
+	],
 	y: endTemplate
 });
 

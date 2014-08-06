@@ -1,9 +1,7 @@
 {
 	"name": "april1",
 
-	"//": "developing 0.4.1",
-
-	"version": "0.3.3",
+	"version": "0.4.1",
 	"description": "April1 templates engine core",
 	"repository": {
 		"type": "git",

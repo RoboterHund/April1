@@ -1,6 +1,9 @@
 // output generator
 'use strict';
 
+var tempOutput = require ('./templates/output');
+
+var dispatch = require ('./dispatch');
 var Parameterizer = require ('./params').Parameterizer;
 
 /**
@@ -16,23 +19,30 @@ var Parameterizer = require ('./params').Parameterizer;
  * @param {Parameterizer} [params] values used to fill the template
  *  can also be set directly:
  *   output.params = params;
+ * @param getDefault
  * @constructor
  */
-function Output (consumer, template, params) {
+function Output (consumer, template, params, getDefault) {
+	this.dispatch = tempOutput.dispatch;
 	this.consumer = consumer;
 	this.template = template;
-	this.params = params;
+	this.params = new Parameterizer (params, getDefault);
 }
+
+Output.prototype.init = function () {
+
+};
 
 /**
  * output generator constructor wrapper
  * @param {Consumer} consumer passed to constructor
  * @param {Array} template passed to constructor
  * @param {Parameterizer} [params] passed to constructor
+ * @param getDefault
  * @returns {Output} initialized output generator
  */
-function output (consumer, template, params) {
-	return new Output (consumer, template, params);
+function output (consumer, template, params, getDefault) {
+	return new Output (consumer, template, params, getDefault);
 }
 
 /**
@@ -49,11 +59,7 @@ function output (consumer, template, params) {
  */
 Output.prototype.generate = function (template) {
 	var nodes = template || this.template;
-	var i;
-	var n = nodes.length;
-	for (i = 1; i < n; i++) {
-		nodes [i].out (this);
-	}
+	dispatch.process (this, nodes, 1, nodes.length);
 };
 
 /**
