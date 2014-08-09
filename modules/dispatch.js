@@ -5,6 +5,8 @@ var types = require ('./types');
 
 var Type = types.Type;
 
+var DISPATCH_KEY = 'dispatch';
+
 /**
  *
  * @param other
@@ -28,40 +30,49 @@ function setup (dispatcher, type, toFunction) {
 
 /**
  *
- * @param pro
- * @param nodes
- * @param i
- * @param to
+ * @param key
+ * @returns {Function}
  */
-function process (pro, nodes, i, to) {
-	var dispatch = pro.dispatch;
-	var other = dispatch.other;
+function process (key) {
+	/**
+	 *
+	 * @param pro
+	 * @param nodes
+	 * @param i
+	 * @param to
+	 */
+	return function doProcess (pro, nodes, i, to) {
+		var dispatch = pro [key];
+		var other = dispatch.other;
 
-	var node;
-	var type;
-	var toFunction;
-	for (; i < to; i++) {
-		node = nodes [i];
+		var node;
+		var type;
+		var toFunction;
+		for (; i < to; i++) {
+			node = nodes [i];
 
-		toFunction = false;
-		if (node instanceof Array) {
-			type = node [0];
-			if (type instanceof Type) {
-				toFunction = dispatch [type.id];
+			toFunction = false;
+			if (node instanceof Array) {
+				type = node [0];
+				if (type instanceof Type) {
+					toFunction = dispatch [type.id];
+				}
+			}
+
+			if (toFunction) {
+				toFunction (pro, node);
+
+			} else {
+				other (pro, node);
 			}
 		}
-
-		if (toFunction) {
-			toFunction (pro, node);
-
-		} else {
-			other (pro, node);
-		}
-	}
+	};
 }
 
 module.exports = {
+	DISPATCH_KEY: DISPATCH_KEY,
 	dispatcher: dispatcher,
 	setup: setup,
-	process: process
+	defineProcess: process,
+	process: process (DISPATCH_KEY)
 };
