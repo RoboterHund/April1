@@ -11,10 +11,11 @@ var output = require ('./output');
 var spec = require ('./spec');
 var types = require ('./types');
 
-function buildTemplate (params) {
+function buildTemplate (params, templateBuilder) {
+	templateBuilder = templateBuilder || tempBuild.templateBuilder;
 	return function doBuildTemplate () {
 		var specRoot = spec.specNode (types.MACRO, arguments);
-		var builder = tempBuild.templateBuilder (params);
+		var builder = templateBuilder (params);
 		dispatch.process (builder, specRoot, 1, specRoot.length);
 		return tempBuild.getTemplate (builder);
 	}

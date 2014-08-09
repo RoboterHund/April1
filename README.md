@@ -97,5 +97,8 @@ Node processing (`modules.dispatch`) is now more flexible:
 - The dispatch table can be passed directly as argument. (`.3`)
 - Added function to process single node instead of array. (`.3`)
 
+``0.4.4``  
+Customizable template builder initialization.
+
 *RoboterHund*  
 *2014-08-09*
