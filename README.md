@@ -72,24 +72,30 @@ The ``test`` folder contains a test script. It is rudimentary, but has good cove
 versions
 --------
 
-``0.2.2``
+``0.2.2``  
 This is the last version to include support for XML and HTML generation.
 
-``0.3.1``
+``0.3.1``  
+Complete redesign.
 
 - Reduced main module to core functions.
-- Complete redesign.
-More flexibility, more exported functions, simpler components.
+- More flexibility, more exported functions, simpler components.
 
-``0.3.2 - 0.3.3``
-Redesign of `common` module, to facilitate extension.
-README update with link to april1-html.
+``0.3.2 - 0.3.3``  
+Redesign of `common` module, to facilitate extension.  
+README update with link to `april1-html`.
 
-``0.4.1``
-Templates are also nodes.
-Less classes.
+``0.4.1``  
+Templates are also nodes.  
+Less classes.  
 Removed the concept of 'template builder state'.
 
-*RoboterHund*  
-*2014/07/06*
+``0.4.2 - 0.4.3``  
+Node processing (`modules.dispatch`) is now more flexible:
 
+- The key to retrieve the dispatch table is no longer hard-coded. (`.2`)
+- The dispatch table can be passed directly as argument. (`.3`)
+- Added function to process single node instead of array. (`.3`)
+
+*RoboterHund*  
+*2014-08-09*
