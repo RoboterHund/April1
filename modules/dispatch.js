@@ -43,36 +43,77 @@ function process (key) {
 	 */
 	return function doProcess (pro, nodes, i, to) {
 		var dispatch = pro [key];
-		var other = dispatch.other;
-
-		var node;
-		var type;
-		var toFunction;
-		for (; i < to; i++) {
-			node = nodes [i];
-
-			toFunction = false;
-			if (node instanceof Array) {
-				type = node [0];
-				if (type instanceof Type) {
-					toFunction = dispatch [type.id];
-				}
-			}
-
-			if (toFunction) {
-				toFunction (pro, node);
-
-			} else {
-				other (pro, node);
-			}
-		}
+		processNodes (pro, dispatch, nodes, i, to);
 	};
+}
+
+/**
+ *
+ * @param pro
+ * @param dispatch
+ * @param nodes
+ * @param i
+ * @param to
+ */
+function processNodes (pro, dispatch, nodes, i, to) {
+	var other = dispatch.other;
+
+	var node;
+	var func;
+	for (; i < to; i++) {
+		node = nodes [i];
+
+		func = toFunction (dispatch, node);
+		if (func) {
+			func (pro, node);
+
+		} else {
+			other (pro, node);
+		}
+	}
+}
+
+/**
+ *
+ * @param pro
+ * @param dispatch
+ * @param node
+ */
+function processNode (pro, dispatch, node) {
+	var func = toFunction (dispatch, node);
+	if (func) {
+		func (pro, node);
+
+	} else {
+		dispatch.other (pro, node);
+	}
+}
+
+/**
+ *
+ * @param dispatch
+ * @param node
+ */
+function toFunction (dispatch, node) {
+	if (node instanceof Array) {
+		var type = node [0];
+		if (type instanceof Type) {
+			return dispatch [type.id];
+		}
+	}
+
+	return null;
 }
 
 module.exports = {
 	DISPATCH_KEY: DISPATCH_KEY,
 	dispatcher: dispatcher,
 	setup: setup,
+
 	defineProcess: process,
-	process: process (DISPATCH_KEY)
+	process: process (DISPATCH_KEY),
+
+	nodes: processNodes,
+	node: processNode,
+	toFunction: toFunction
 };
