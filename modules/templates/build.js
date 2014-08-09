@@ -110,7 +110,7 @@ function list (builder, node) {
 	var key = node [1];
 	var sub = subBuilder (builder);
 
-	dispatch.process (sub, node, 2, node.length);
+	dispatch.nodes (sub, builder.dispatch, node, 2, node.length);
 
 	var template = getTemplate (sub);
 	appendNode (builder, spec.listNode (key, template));

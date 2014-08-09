@@ -59,7 +59,8 @@ function output (consumer, template, params, getDefault) {
  */
 Output.prototype.generate = function (template) {
 	var nodes = template || this.template;
-	dispatch.process (this, nodes, 1, nodes.length);
+	dispatch.nodes (
+		this, this.dispatch, nodes, 1, nodes.length);
 };
 
 /**
