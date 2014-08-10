@@ -168,3 +168,64 @@ if (expect === string) {
 } else {
 	console.log ('FAIL');
 }
+
+// test 4
+// custom builder init
+
+var numBuildersExpected = 3;
+var numBuildersCreated = 0;
+
+var buildTemplate = A.modules.template.buildTemplate (
+	A.modules.template.defaultTemplateParams (),
+	function (params) {
+		var builder = A.modules.templates.build.templateBuilder (params);
+		numBuildersCreated++;
+		return builder;
+	}
+);
+
+template = buildTemplate (
+	1,
+	A.list (
+		'A',
+		2
+	),
+	A.list (
+		'B',
+		3
+	)
+);
+
+values = {
+	A: [
+		{},
+		{},
+		{}
+	],
+	B: [
+		{},
+		{}
+	]
+};
+
+expect = '122233';
+string =
+	A.string (template, values);
+
+console.log (expect);
+console.log (string);
+if (expect === string) {
+	console.log ('OK');
+} else {
+	console.log ('FAIL');
+}
+console.log (expect);
+console.log (string);
+console.log ('builders: ' + numBuildersExpected);
+console.log ('builders: ' + numBuildersCreated);
+if (expect === string
+	&& numBuildersExpected === numBuildersCreated) {
+	console.log ('OK');
+} else {
+	console.log ('FAIL');
+}

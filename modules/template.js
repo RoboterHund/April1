@@ -13,6 +13,9 @@ var types = require ('./types');
 
 function buildTemplate (params, templateBuilder) {
 	templateBuilder = templateBuilder || tempBuild.templateBuilder;
+	if (!params.subBuilder) {
+		params.subBuilder = templateBuilder;
+	}
 	return function doBuildTemplate () {
 		var specRoot = spec.specNode (types.MACRO, arguments);
 		var builder = templateBuilder (params);
