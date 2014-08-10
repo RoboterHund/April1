@@ -78,7 +78,7 @@ function getTemplate (builder) {
  * @returns {{}}
  */
 function subBuilder (builder) {
-	return templateBuilder (builder.params);
+	return builder.params.subBuilder (builder.params);
 }
 
 /**
